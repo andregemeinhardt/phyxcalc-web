@@ -151,7 +151,7 @@ export const WorksheetEditor = forwardRef<WorksheetEditorRef, WorksheetEditorPro
               color: 'var(--color-editor-text)',
             },
             '.cm-scroller': { overflow: 'auto', lineHeight: '24px' },
-            '.cm-content': { padding: '8px 0' },
+            '.cm-content': { padding: '8px 0', caretColor: 'var(--color-cursor)' },
             '.cm-line': { padding: '0 8px' },
             '.cm-activeLine': { backgroundColor: 'var(--color-active-line)' },
             '.cm-gutters': {
@@ -163,7 +163,7 @@ export const WorksheetEditor = forwardRef<WorksheetEditorRef, WorksheetEditorPro
               backgroundColor: 'var(--color-active-gutter)',
               color: 'var(--color-editor-text)',
             },
-            '.cm-cursor': {
+            '.cm-cursor, .cm-dropCursor': {
               borderLeftColor: 'var(--color-cursor)',
             },
           }),

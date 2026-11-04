@@ -28,6 +28,7 @@
   --color-active-gutter: #1e293b;
   --color-cursor: #38bdf8;
   --color-selection: #334155;
+  caret-color: var(--color-cursor);
 }
 
 html, body, #root {
@@ -60,7 +61,13 @@ html, body, #root {
   font-weight: 600;
 }
 
-.cm-editor .cm-cursor {
+.cm-editor,
+.cm-editor .cm-content {
+  caret-color: var(--color-cursor) !important;
+}
+
+.cm-editor .cm-cursor,
+.cm-editor .cm-dropCursor {
   border-left-color: var(--color-cursor) !important;
   border-left-width: 2px !important;
 }
