@@ -1,0 +1,4 @@
+Symbols;symbols.txt
+Numbers;numbersDock.txt
+Operators;operatorsDock.txt
+Electronic Functions;electronicFunctions.txt

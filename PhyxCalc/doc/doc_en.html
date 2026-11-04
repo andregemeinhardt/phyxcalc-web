@@ -1,0 +1,539 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf8">
+<meta name="generator" content="AsciiDoc 8.4.5">
+<title>PhyxCalc 3 Help</title>
+</head>
+<body>
+<h1>PhyxCalc 3 Help</h1>
+<p>
+</p>
+<p>Open Source Software<br>
+Alexander Rössler &lt;<a href="mailto:mail.aroessler@gmail.com">mail.aroessler@gmail.com</a>&gt;<br>
+Christian Schirm</p>
+<hr>
+<h2><a name="_introduction"></a>1. Introduction</h2>
+<p>PhyxCalc introduces a very flexible and comfortable way to calculate mathematical expressions, including physical units and complex numbers, using a flexible text-editor-like environment. In your expressions you can use a predefined selection of common constants and units or defining your own. You can even export your calculated formulas to OpenOffice Math formula editor to include them in your everyday documents (support for LaTeX export is planned).</p>
+<p>However please consider following rules:</p>
+<ul>
+<li>
+<p>
+equivocal expressions (e.g. unit m and variable m) can cause problems, so try to avoid them
+</p>
+</li>
+</ul>
+<hr>
+<h2><a name="_editor"></a>2. Editor</h2>
+<p>In the main text edit expressions are both written and calculated. Just enter your expression and press return (or enter on mobile platforms) and the result will be written in the next line. The line will be replaced if it starts with an equal sign. Not every result will be shown in the next line, some expressions like variable definitions have no output in the text edit. Inserting symbols and expressions is also possible with various docks, adding your own costomized dock is also possible and will be shown later.</p>
+<p><strong>Example:</strong> approximate formula for pi</p>
+<table border="0" bgcolor="#e8e8e8" width="100%" cellpadding="10"><tr><td>
+<pre>3*ln(640320)/sqrt(163) &lt;Return&gt;
+=3.141592653589793016</pre>
+</td></tr></table>
+<h3><a name="_comments"></a>2.1. Comments</h3>
+<p>PhyxCalc understands following comment types:<br>
+<strong>//</strong>    single line comment<br>
+/* */ multi line comment</p>
+<p><strong>Example:</strong></p>
+<table border="0" bgcolor="#e8e8e8" width="100%" cellpadding="10"><tr><td>
+<pre>x=2 // a single line comment
+x++ /* a very long comment
+that would not fit in one line */</pre>
+</td></tr></table>
+<h3><a name="_keyboard_shortcuts"></a>2.2. Keyboard shortcuts</h3>
+<p><strong>Text Editor shortcuts:</strong><br>
+&lt;Return&gt;:               Calculate expression at current line<br>
+&lt;Shift + Enter&gt;:        Insert line break<br>
+&lt;Ctrl + Enter&gt;:         Calculate expression, cursor stays at line<br>
+&lt;Ctrl + Z&gt;:             Undo<br>
+&lt;Ctrl + Shift + Z&gt;:     Redo<br>
+&lt;Ctrl + X&gt;:             Cut<br>
+&lt;Ctrl + C&gt;:             Copy<br>
+&lt;Ctrl + V&gt;:             Paste<br>
+&lt;Ctrl + A&gt;:             Select All<br></p>
+<p><strong>Application shortcuts:</strong><br>
+&lt;F1&gt;:                   Show help<br>
+&lt;Ctrl + N&gt;:             New document<br>
+&lt;Ctrl + O&gt;:             Open document<br>
+&lt;Ctrl + S&gt;:             Save document<br>
+&lt;Ctrl + Shift + S&gt;:     Save all documents<br>
+&lt;Ctrl + W&gt;:             Close document<br>
+&lt;Ctrl + Shift + W&gt;:     Close all documents<br>
+&lt;Ctrl + T&gt;:             Open new tab<br>
+&lt;Ctrl + R&gt;:             Recalculate whole document<br>
+&lt;Ctrl + Shift + R&gt;:     Calculate from line<br>
+&lt;Ctrl + E&gt;:             Open export dialog<br>
+&lt;Ctrl + Q&gt;:             Quit application<br></p>
+<h3><a name="_exporting_formulas"></a>2.3. Exporting formulas</h3>
+<p>To export formulas use the export dialog. Once the dialog is opened, your expressions will be instantly converted. The converted output just insert in your OpenOffice Math.</p>
+<h3><a name="_editing_startup_definitions"></a>2.4. Editing startup definitions</h3>
+<p>PhyxCalc loads a lot of predefined units and constants on startup. You can edit these definitions quite easy: just edit the file <strong>definitions.txt</strong> in your settings directory. You can easily open your settings directory in the menu.+
+<strong>NOTE:</strong> if you want to restore the default definitions, delete the defintions file and restart PhyxCalc</p>
+<h3><a name="_adding_your_own_docks"></a>2.5. Adding your own docks</h3>
+<p>Adding your own customized docks to PhyxCalc is really simple. Just create a textfile with following outline in your setting directory:</p>
+<table border="0" bgcolor="#e8e8e8" width="100%" cellpadding="10"><tr><td>
+<pre>tooltip; name in the dock; text to insert in the text editor</pre>
+</td></tr></table>
+<p><strong>Example:</strong></p>
+<table border="0" bgcolor="#e8e8e8" width="100%" cellpadding="10"><tr><td>
+<pre>sine function;sin;sin()
+cosine function;cos;cos()
+tangens function;tan;tan()
+arcus sine function;asin;asin()
+arcus cosine function;acos;acos()</pre>
+</td></tr></table>
+<p>Then open the file docks.txt and add a line with the following outline:</p>
+<table border="0" bgcolor="#e8e8e8" width="100%" cellpadding="10"><tr><td>
+<pre>docktitle;yourdockfilename.txt</pre>
+</td></tr></table>
+<p><strong>Example:</strong></p>
+<table border="0" bgcolor="#e8e8e8" width="100%" cellpadding="10"><tr><td>
+<pre>Symbols;symbols.txt</pre>
+</td></tr></table>
+<p>Now restart PhyxCalc and start using your dock.</p>
+<hr>
+<h2><a name="_mathematical_functions"></a>3. Mathematical Functions</h2>
+<p>All mathematical functions can be written with the first letter uppercase or lowercase or only with uppercase letters. Trigonometric functions are using radiant, for degrees use dimensionless unit °.</p>
+<h3><a name="_operators_and_symbols"></a>3.1. Operators and symbols</h3>
+<p>PhyxCalc uses C++-like operators and some additional operators for special mathematical functionality. The operators are ordered beginning with highest priority.</p>
+<p><b></b>PhyxCalc Operators</p>
+<table rules="all"
+width="100%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<thead>
+<tr>
+<th align="left" width="33%" valign="top">Predence </th>
+<th align="left" width="33%" valign="top">Operator </th>
+<th align="left" width="33%" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" width="33%" valign="top"><p>1</p></td>
+<td align="left" width="33%" valign="top"><p>++ --</p></td>
+<td align="left" width="33%" valign="top"><p>Prefix/postfix increment and decrement</p></td>
+</tr>
+<tr>
+<td align="left" width="33%" valign="top"><p></p></td>
+<td align="left" width="33%" valign="top"><p>()</p></td>
+<td align="left" width="33%" valign="top"><p>Braces and function calls</p></td>
+</tr>
+<tr>
+<td align="left" width="33%" valign="top"><p></p></td>
+<td align="left" width="33%" valign="top"><p>{}</p></td>
+<td align="left" width="33%" valign="top"><p>Numeric value braces, removing the unit</p></td>
+</tr>
+<tr>
+<td align="left" width="33%" valign="top"><p>2</p></td>
+<td align="left" width="33%" valign="top"><p>+ -</p></td>
+<td align="left" width="33%" valign="top"><p>Unary plus and minus</p></td>
+</tr>
+<tr>
+<td align="left" width="33%" valign="top"><p></p></td>
+<td align="left" width="33%" valign="top"><p>! ~</p></td>
+<td align="left" width="33%" valign="top"><p>Prefix: logical NOT and bitwise NOT</p></td>
+</tr>
+<tr>
+<td align="left" width="33%" valign="top"><p></p></td>
+<td align="left" width="33%" valign="top"><p>!</p></td>
+<td align="left" width="33%" valign="top"><p>Postfix: fakulty</p></td>
+</tr>
+<tr>
+<td align="left" width="33%" valign="top"><p>3</p></td>
+<td align="left" width="33%" valign="top"><p>^ ² ³</p></td>
+<td align="left" width="33%" valign="top"><p>Powers</p></td>
+</tr>
+<tr>
+<td align="left" width="33%" valign="top"><p>4</p></td>
+<td align="left" width="33%" valign="top"><p>* / mod</p></td>
+<td align="left" width="33%" valign="top"><p>Multiplication, division and remainder (modulo operator)</p></td>
+</tr>
+<tr>
+<td align="left" width="33%" valign="top"><p>5</p></td>
+<td align="left" width="33%" valign="top"><p>+ -</p></td>
+<td align="left" width="33%" valign="top"><p>Addition and substraction</p></td>
+</tr>
+<tr>
+<td align="left" width="33%" valign="top"><p>6</p></td>
+<td align="left" width="33%" valign="top"><p>&lt;&lt; &gt;&gt;</p></td>
+<td align="left" width="33%" valign="top"><p>Bitwise left shift and right shift</p></td>
+</tr>
+<tr>
+<td align="left" width="33%" valign="top"><p>7</p></td>
+<td align="left" width="33%" valign="top"><p>&lt; &lt;= &gt;= &gt;</p></td>
+<td align="left" width="33%" valign="top"><p>Relational &lt;, ≤, ≥ and &gt;</p></td>
+</tr>
+<tr>
+<td align="left" width="33%" valign="top"><p>8</p></td>
+<td align="left" width="33%" valign="top"><p>== !=</p></td>
+<td align="left" width="33%" valign="top"><p>Relational = and ≠</p></td>
+</tr>
+<tr>
+<td align="left" width="33%" valign="top"><p>9</p></td>
+<td align="left" width="33%" valign="top"><p>&amp; bAND</p></td>
+<td align="left" width="33%" valign="top"><p>Bitwise AND</p></td>
+</tr>
+<tr>
+<td align="left" width="33%" valign="top"><p>10</p></td>
+<td align="left" width="33%" valign="top"><p>^^ bXOR</p></td>
+<td align="left" width="33%" valign="top"><p>Bitwise XOR</p></td>
+</tr>
+<tr>
+<td align="left" width="33%" valign="top"><p>11</p></td>
+<td align="left" width="33%" valign="top"><p>| bOR</p></td>
+<td align="left" width="33%" valign="top"><p>Bitwise OR</p></td>
+</tr>
+<tr>
+<td align="left" width="33%" valign="top"><p>12</p></td>
+<td align="left" width="33%" valign="top"><p>XAND</p></td>
+<td align="left" width="33%" valign="top"><p>Logical XAND</p></td>
+</tr>
+<tr>
+<td align="left" width="33%" valign="top"><p>13</p></td>
+<td align="left" width="33%" valign="top"><p>&amp;&amp; AND NAND</p></td>
+<td align="left" width="33%" valign="top"><p>Logical AND and NAND</p></td>
+</tr>
+<tr>
+<td align="left" width="33%" valign="top"><p>14</p></td>
+<td align="left" width="33%" valign="top"><p>XOR</p></td>
+<td align="left" width="33%" valign="top"><p>Logical XOR</p></td>
+</tr>
+<tr>
+<td align="left" width="33%" valign="top"><p>15</p></td>
+<td align="left" width="33%" valign="top"><p>|| OR NOR</p></td>
+<td align="left" width="33%" valign="top"><p>Logical OR and NOR</p></td>
+</tr>
+<tr>
+<td align="left" width="33%" valign="top"><p>16</p></td>
+<td align="left" width="33%" valign="top"><p>?: if then else IF(;;)</p></td>
+<td align="left" width="33%" valign="top"><p>Conditional operators</p></td>
+</tr>
+<tr>
+<td align="left" width="33%" valign="top"><p>17</p></td>
+<td align="left" width="33%" valign="top"><p>=</p></td>
+<td align="left" width="33%" valign="top"><p>Direct assignment</p></td>
+</tr>
+<tr>
+<td align="left" width="33%" valign="top"><p></p></td>
+<td align="left" width="33%" valign="top"><p>+= -=</p></td>
+<td align="left" width="33%" valign="top"><p>Assignment by sum and difference</p></td>
+</tr>
+<tr>
+<td align="left" width="33%" valign="top"><p></p></td>
+<td align="left" width="33%" valign="top"><p>*= /= %=</p></td>
+<td align="left" width="33%" valign="top"><p>Assignment by product, quotient and remainder</p></td>
+</tr>
+<tr>
+<td align="left" width="33%" valign="top"><p></p></td>
+<td align="left" width="33%" valign="top"><p>&lt;&lt;= &gt;&gt;=</p></td>
+<td align="left" width="33%" valign="top"><p>Assignment by bitwise left shift and right shift</p></td>
+</tr>
+<tr>
+<td align="left" width="33%" valign="top"><p></p></td>
+<td align="left" width="33%" valign="top"><p>&amp;= ^= |=</p></td>
+<td align="left" width="33%" valign="top"><p>Assignment by bitwise AND, XOR and OR</p></td>
+</tr>
+<tr>
+<td align="left" width="33%" valign="top"><p>18</p></td>
+<td align="left" width="33%" valign="top"><p>,</p></td>
+<td align="left" width="33%" valign="top"><p>Comma, sequential operator</p></td>
+</tr>
+</tbody>
+</table>
+<p><b></b>Special Operators, see specific sections for more details</p>
+<table rules="all"
+width="100%"
+frame="border"
+cellspacing="0" cellpadding="4">
+<thead>
+<tr>
+<th align="left" width="50%" valign="top">Operator </th>
+<th align="left" width="50%" valign="top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left" width="50%" valign="top"><p>-&gt;</p></td>
+<td align="left" width="50%" valign="top"><p>Converting to something</p></td>
+</tr>
+<tr>
+<td align="left" width="50%" valign="top"><p>=</p></td>
+<td align="left" width="50%" valign="top"><p>Defining and deleting variables</p></td>
+</tr>
+<tr>
+<td align="left" width="50%" valign="top"><p>:=</p></td>
+<td align="left" width="50%" valign="top"><p>Defining and deleting constants</p></td>
+</tr>
+<tr>
+<td align="left" width="50%" valign="top"><p>other</p></td>
+<td align="left" width="50%" valign="top"><p>Defining unit systems, units and prefixes, see units for more details</p></td>
+</tr>
+</tbody>
+</table>
+<h3><a name="_trigonometric_and_hyperbolic_functions"></a>3.2. Trigonometric and hyperbolic functions</h3>
+<p><strong>sin</strong>, <strong>cos</strong>, <strong>tan</strong>, <strong>arcsin</strong>, <strong>arccos</strong>, <strong>arctan</strong><br>
+<strong>cot</strong>, <strong>sec</strong>, <strong>csc</strong>, <strong>arccot</strong>, <strong>arcsec</strong>, <strong>arccsc</strong><br>
+<strong>sinh</strong>, <strong>cosh</strong>, <strong>tanh</strong>, <strong>arcsinh</strong>, <strong>arccosh</strong>, <strong>arctanh</strong><br>
+<strong>coth</strong>, <strong>sech</strong>, <strong>csch</strong>, <strong>arccoth</strong>, <strong>arcsech</strong>, <strong>arccsch</strong></p>
+<h3><a name="_logarithms_exponential_function_and_roots"></a>3.3. Logarithms, exponential function and roots</h3>
+<p><strong>ln</strong>, <strong>log</strong>&lt;n&gt;, <strong>exp</strong>, <strong>sqrt</strong>=<strong>sqr</strong>, <strong>root</strong>&lt;n&gt;<br>
+<strong>Example:</strong></p>
+<table border="0" bgcolor="#e8e8e8" width="100%" cellpadding="10"><tr><td>
+<pre>exp(3)
+=20.08553692318766774
+log2(1024)
+=10
+root12(25)
+=1.307660486011830591</pre>
+</td></tr></table>
+<h3><a name="_threshold_functions"></a>3.4. Threshold functions</h3>
+<p><strong>min</strong>(a,b), <strong>max</strong>(a,b)<br>
+<strong>abs</strong> absolute value<br>
+<strong>sign</strong> signum function: -1, 0, 1 for x&lt;0, x=0, x&gt;0<br>
+<strong>heaviside</strong> heaviside function: 0, 1 for x&lt;0, x&gt;=0<br></p>
+<h3><a name="_discretization_functions"></a>3.5. Discretization functions</h3>
+<p><strong>int</strong> = <strong>trunc</strong>, <strong>ceil</strong>, <strong>floor</strong>, <strong>round</strong><br>
+(truncate, round up, round down, round-to-nearest)</p>
+<h3><a name="_random_functions"></a>3.6. Random functions</h3>
+<p><strong>rnd</strong> = <strong>rand</strong>: generates random number between 0 and 1<br>
+<strong>rndi</strong> = <strong>randi</strong>: generates random number 0&lt;=rndi(i)&lt;i<br>
+<strong>rndg</strong>(m, nd) = <strong>randg</strong>: generates Gaussian distributed number mean value m and normal distribution nd</p>
+<h3><a name="_complex_functions"></a>3.7. Complex functions</h3>
+<p><strong>Re</strong> returns real part of a complex number<br>
+<strong>Im</strong> returns imaginary part of a complex number<br>
+<strong>arg</strong> returns the argument of a complex number<br>
+<strong>norm</strong> returns the norm value of a complex number<br>
+<strong>conj</strong> returns the conjugate of a complex number<br>
+<strong>polar</strong>(rho, theta) returns a complex number corresponding to the complex number defined by its polar components, where rho is the magnitude and theta is the phase angle</p>
+<h3><a name="_other_functions"></a>3.8. Other functions</h3>
+<p><strong>ans</strong> answer function, returns last result in memory &#8594; similar to using # variable<br>
+<strong>bcd</strong> binary coded decimal function, converts a binary decimal coded number back to a dezimal value<br>
+<strong>tobcd</strong> inverse of the bcd function<br>
+<strong>gcd</strong>(x,y) greatest common divisor of x and y<br>
+<strong>lcm</strong>(x,y) least common multiple of x and y</p>
+<h3><a name="_defining_custom_functions"></a>3.9. Defining custom functions</h3>
+<p>Defing custom functions in PhyxCalc is pretty easy, just write the name of your function, then add the parameters and an expression.</p>
+<p><strong>Example:</strong> calculating the current at a diode around the forward voltage</p>
+<table border="0" bgcolor="#e8e8e8" width="100%" cellpadding="10"><tr><td>
+<pre>Is=10e-15A
+VT=25mV
+I(U)=Is*(exp(U/VT)-1)
+
+I(0.6V)
+=264.8912213µA
+I(0.7V)
+=14.46257064mA
+I(0.8V)
+=789.6296018mA</pre>
+</td></tr></table>
+<h3><a name="_precision"></a>3.10. Precision</h3>
+<p>PhyxCalc is using 64bit and 96bit floating point numbers, depending on your operating system. As every computing system not using arbitrary precision, PhyxCalc has accuracy problems. Depending on your expression, this can cause your result to be not as accurate as you wish. See Wikipedia for more information on floating point numbers and accuracy problems: <a href="http://en.wikipedia.org/wiki/Floating_point#Accuracy_problems">http://en.wikipedia.org/wiki/Floating_point#Accuracy_problems</a></p>
+<hr>
+<h2><a name="_list_addition"></a>4. List-Addition</h2>
+<p>To calculate a long list of numbers you can add a binary operator to the end of the first line. The result of this and the following lines will not be output, but instead calculated togheter. You can view the current result in the variable dock. An empty line outputs the result.</p>
+<p>The list mode can also be used to split an expression into multiple lines, but keep in mind that every line will be calculated as single term, maybe ignoring operator predence.</p>
+<p><strong>Example: addition</strong></p>
+<table border="0" bgcolor="#e8e8e8" width="100%" cellpadding="10"><tr><td>
+<pre>12+ &lt;Return&gt;
+4 &lt;Return&gt;
+3 &lt;Return&gt;
+5 &lt;Return&gt;
+&lt;Return&gt;
+=24</pre>
+</td></tr></table>
+<p><strong>Example: multiplication</strong></p>
+<table border="0" bgcolor="#e8e8e8" width="100%" cellpadding="10"><tr><td>
+<pre>2* &lt;Return&gt;
+2+3 &lt;Return&gt;
+&lt;Return&gt;
+=10  // 2*(2+3) and not 2*2+3</pre>
+</td></tr></table>
+<hr>
+<h2><a name="_variables_and_constants"></a>5. Variables and Constants</h2>
+<p>Variables could be used to save values in memory and as parameters for expressions. There is also a dock, where you can view all currently set variables.</p>
+<p><strong>Defining variables and constants:</strong><br>
+&lt;variable name&gt; = &lt;expression&gt;<br>
+&lt;constant name&gt; := &lt;expression&gt;<br>
+<strong>NOTE:</strong> only the result of the expression will be saved in the variable, to save the whole expression use functions</p>
+<p><strong>Deleting variables and constants:</strong><br>
+&lt;variable name&gt; =<br>
+&lt;constant name&gt; :=<br></p>
+<p><strong>Using variables and constants:</strong><br>
+&lt;variable name&gt;<br>
+&lt;constant name&gt;_<br></p>
+<p><strong>Example:</strong></p>
+<table border="0" bgcolor="#e8e8e8" width="100%" cellpadding="10"><tr><td>
+<pre>x=2 //defining variable x
+c0:=299792458m/s //defining c0, speed of light in vacuum
+
+x*c0_
+=5.99585e+08m/s
+
+x= //deleting variable x
+c0:= //deleting constant c0</pre>
+</td></tr></table>
+<p>The <strong>variable #</strong> is a bit special. Everytime a value is output, the variable # is automatically set to this value, however, this variable can also be used like every other variable.<br>
+You can also use the <strong>ans function</strong> instead of the # variable.</p>
+<p><strong>Example:</strong></p>
+<table border="0" bgcolor="#e8e8e8" width="100%" cellpadding="10"><tr><td>
+<pre>5+4
+=9
+#+sqr(#)  //# is like the ans (answer) button on some pocket calculators
+=12</pre>
+</td></tr></table>
+<hr>
+<h2><a name="_number_formats_and_systems"></a>6. Number formats and systems</h2>
+<p>You can insert numbers in decimal, hexadecimal, octal, binary or scientific format. You can also input complex numbers using the imaginary unit i or j. By default the ouput is automatically shown as integer, floating point number or in scientific format. Floating point numbers can also be input without leading zero. PhyxCalc uses 19-20 digits precision, depending on the platform you use, however, the ouput precision is set to 6 by default, you can alter this setting in the settings dialog.</p>
+<p>Using the -&gt; operator numbers can also be output in hexadecimal, octal or binary format. However, this is only implemented for positive integers.</p>
+<p><strong>Example:</strong></p>
+<table border="0" bgcolor="#e8e8e8" width="100%" cellpadding="10"><tr><td>
+<pre>//different number formats
+(10 + 1.1) * 2E-10 / 4e2 + 0xFFAF - (0b10101001 + 0.12) * 0o345
+=26726.5
+
+//using complex numbers
+(2j+34)*(23.2+4.5i)
+=779.8+199.4i
+
+//differnt number conversions
+23-&gt;hex //converting decimal to hexadecimal
+=0x17
+10-&gt;bin //converting decimal to binary
+=0b00001010
+34-&gt;oct //converting decimal to octal
+=0o42
+0xF0-&gt;bin //converting hexadecimal to binary
+=0b11110000</pre>
+</td></tr></table>
+<hr>
+<h2><a name="_units"></a>7. Units</h2>
+<p>With PhyxCalc you have the ability to use units togheter with numbers. Derived units must be splitted with the multiplication sign *. Units can be output with base units or simplified to derived units. You  can also use prefixes, if the unit system, the unit is defined in, supports them. Units can be deleted by overwriting them with an empty expression.</p>
+<h3><a name="_unit_systems"></a>7.1. Unit Systems</h3>
+<p>All units connected togheter should use the same unit system. Within one unit system, units will be converted into each other if possible. All units not contained in a unit system can not use prefixes. For example the SI unit system consists of 7 base units, all units that are part of the SI system can be expressed with the 7 base units. Also all SI units can use the SI prefixes.</p>
+<p><strong>Unit systems can be defined like this:</strong><br>
+[&lt;name of the unit system&gt;]<br>
+[&lt;name of the unit system&gt;]:=</p>
+<p><strong>Examples:</strong></p>
+<table border="0" bgcolor="#e8e8e8" width="100%" cellpadding="10"><tr><td>
+<pre>[si] //defines a unit system
+[si]:= //deletes the unit system</pre>
+</td></tr></table>
+<h3><a name="_base_units"></a>7.2. Base Units</h3>
+<p>All unit systems use a set of base units. Also units defined without a unit system need base units.</p>
+<p><strong>Base units can be defined like this:</strong><br>
+&lt;name of the unit&gt;=[]<br>
+&lt;name of the unit&gt;@&lt;name of the unit system&gt;=[]<br>
+&lt;name of the unit&gt;@&lt;name of the unit system&gt;@&lt;prefered prefix&gt;=[]</p>
+<p><strong>Examples:</strong></p>
+<table border="0" bgcolor="#e8e8e8" width="100%" cellpadding="10"><tr><td>
+<pre>feet=[] //defines the base unit feet
+m@si=[] //defines the base unit meter in the unit system si
+g@si@k=[] //defines the base unit gramm in the unit system si with the prefered prefix k (=kg)</pre>
+</td></tr></table>
+<h3><a name="_derived_units"></a>7.3. Derived Units</h3>
+<p>Derived units are units that consists of several base units, like for example C (= A*s).</p>
+<p><strong>Derived units can be defined like this:</strong><br>
+&lt;name of the unit&gt;=[&lt;expression&gt;]<br>
+&lt;name of the unit&gt;@&lt;name of the unit system&gt;=[&lt;expression&gt;]<br>
+&lt;name of the unit&gt;@&lt;name of the unit system&gt;@&lt;prefered prefix&gt;=[&lt;expression&gt;]</p>
+<p><strong>Examples:</strong></p>
+<table border="0" bgcolor="#e8e8e8" width="100%" cellpadding="10"><tr><td>
+<pre>ppm=[1E-6]  //parts per million
+J@si=[N*m]  //energy: Joule
+Wh@si@k=[1kW*h] //energy: kilowatts per hour</pre>
+</td></tr></table>
+<h3><a name="_offset_units"></a>7.4. Offset Units</h3>
+<p>Some units also have a offset to a derived or base unit, like for example °C. However, offset units are by default not used for output.</p>
+<p><strong>Offset units can be defined like this:</strong><br>
+&lt;name of the unit&gt;=[&lt;expression&gt;]&lt;offset&gt;<br>
+&lt;name of the unit&gt;@&lt;name of the unit system&gt;=[&lt;expression&gt;]&lt;offset&gt;<br>
+&lt;name of the unit&gt;@&lt;name of the unit system&gt;@&lt;prefered prefix&gt;=[&lt;expression&gt;]&lt;offset&gt;</p>
+<p><strong>Examples:</strong></p>
+<table border="0" bgcolor="#e8e8e8" width="100%" cellpadding="10"><tr><td>
+<pre>°C=[1K]-273.15      //temperature: degrees Celsius
+°F=[5/9*1K]-459.67*5/9 //temperature: degrees Fahrenheit</pre>
+</td></tr></table>
+<h3><a name="_unit_prefixes"></a>7.5. Unit Prefixes</h3>
+<p>Units contained in unit systems can also use prefixes.</p>
+<p><strong>Prefixes can be defined like this:</strong><br>
+&lt;name of the prefix&gt;:&lt;name of the unit system&gt;=[&lt;expression&gt;]<br>
+&lt;name of the prefix&gt;:&lt;name of the unit system&gt;:i=[&lt;expression&gt;]<br>
+&lt;name of the prefix&gt;:=</p>
+<p><strong>Examples:</strong></p>
+<table border="0" bgcolor="#e8e8e8" width="100%" cellpadding="10"><tr><td>
+<pre>//SI prefixes
+y:si=[1e-24]
+z:si=[1e-21]
+a:si=[1e-18]
+f:si=[1e-15]
+p:si=[1e-12]
+n:si=[1e-9]
+µ:si=[1e-6]
+m:si=[1e-3]
+c:si:i=[1e-2] //i is the input only flag, prefixes with this flag can only be use for input
+d:si:i=[1e-1]
+da:si:i=[1e1]
+h:si:i=[1e2]
+k:si=[1e3]
+M:si=[1e6]
+G:si=[1e9]
+T:si=[1e12]
+P:si=[1e15]
+E:si=[1e18]
+Z:si=[1e21]
+Y:si=[1e24]
+
+p:= //deletes the prefix p (pico)</pre>
+</td></tr></table>
+<hr>
+<h2><a name="_conversion"></a>8. Conversion</h2>
+<p>Expressions can be converted to defined units with the operator -&gt;.</p>
+<p>Example:</p>
+<table border="0" bgcolor="#e8e8e8" width="100%" cellpadding="10"><tr><td>
+<pre>20m/s -&gt; km/h
+=72km/h</pre>
+</td></tr></table>
+<hr>
+<h2><a name="_quick_notation_and_multiple_meanings"></a>9. Quick Notation and Multiple Meanings</h2>
+<p>Braces behind functions can be left out. Multiplication without multiplication sign is currently not implemented. However keep in mind, that multiple meanings could occur, when you for example define a unit with the same name a unit has.</p>
+<p><strong>Examples:</strong></p>
+<table border="0" bgcolor="#e8e8e8" width="100%" cellpadding="10"><tr><td>
+<pre>sqr2
+=1.41421</pre>
+</td></tr></table>
+<hr>
+<h2><a name="_datasets_and_plotting"></a>10. Datasets and Plotting</h2>
+<p>PhyxCalc provides an easy way to create datasets and to plot them. Datasets are multi-dimensional
+sets of data (currently only 2 dimensions are supported), similar to tables. To plot a function
+you need to create a dataset, all things concerning plotting can then be done in the plot window.
+Depending on the function you use, a dataset with linear or logarithmic scale will be created.
+Logarithmic scales are especially usable where you need to plot a big range of data, like for
+example frequency analysis.</p>
+<p>These functions can be used to create datasets:<br>
+<strong>Linear datasets:</strong><br>
+data([&lt;expression&gt;],&lt;parameter&gt;,&lt;start value&gt;,&lt;stop value&gt;)<br>
+data([&lt;expression&gt;],&lt;parameter&gt;,&lt;start value&gt;,&lt;stop value&gt;,&lt;step size&gt;)<br>
+The first function will calculate the size of the steps automatically.<br>
+<strong>Logarithmic datasets:</strong><br>
+datalog([&lt;expression&gt;],&lt;parameter&gt;,&lt;start value&gt;,&lt;stop value&gt;)<br>
+datalog([&lt;expression&gt;],&lt;parameter&gt;,&lt;start value&gt;,&lt;stop value&gt;,&lt;steps&gt;)<br>
+The first function will use 1000 steps.</p>
+<p><strong>Examples:</strong></p>
+<table border="0" bgcolor="#e8e8e8" width="100%" cellpadding="10"><tr><td>
+<pre>data([x^2],x,-5,5) //creates a linear dataset from -5 to 5 for the expression x^2
+data([exp(y)],y,0,5,0.01) //creates a linear dataset from 0 to 5 with step size 0.01 for the exp function
+datalog([H(j*2*pi*f)],f,1Hz,1MHz) //creates a logarithmic dataset from 1Hz to 1MHz</pre>
+</td></tr></table>
+<p>To plot datasets you need to open the plot window and then click on a dataset, then configure
+the plot until you are satisfied. You can select multiple datasets to plot them in one window.
+To rename datasets double click on them.</p>
+<p><strong>NOTE:</strong> To plot logarithmic datasets correctly use logarithmic axis scales.</p>
+<p></p>
+<p></p>
+<hr><p><small>
+Last updated 2012-04-08 23:15:34 CEST
+</small></p>
+</body>
+</html>

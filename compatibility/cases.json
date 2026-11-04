@@ -1,0 +1,3774 @@
+{
+  "schemaVersion": 1,
+  "upstreamRevision": "c952bc8fecda1f5c14e05ed33656492564bc6cd4",
+  "profile": {
+    "startupDefinitions": "PhyxCalc/settings/definitions.txt",
+    "decimalPrecision": 6,
+    "numberFormat": "g",
+    "imaginaryUnit": "j",
+    "unitMode": 1,
+    "prefixMode": 1,
+    "useFractions": false,
+    "outputWithNumbers": false,
+    "outputResult": false,
+    "locale": "C"
+  },
+  "cases": [
+    {
+      "id": "arithmetic-precedence",
+      "feature": "operators",
+      "evidence": "source-derived",
+      "source": "PhyxCalc/settings/grammar.txt",
+      "steps": [
+        {
+          "input": "2+3*4",
+          "expect": {
+            "kind": "value",
+            "real": "14",
+            "imaginary": "0",
+            "unit": ""
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "14",
+            "input": "2+3*4",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "14",
+              "unit": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "arithmetic-brackets",
+      "feature": "operators",
+      "evidence": "source-derived",
+      "source": "PhyxCalc/settings/grammar.txt",
+      "steps": [
+        {
+          "input": "(2+3)*4",
+          "expect": {
+            "kind": "value",
+            "real": "20",
+            "imaginary": "0",
+            "unit": ""
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "20",
+            "input": "(2+3)*4",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "20",
+              "unit": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "unit-conversion-speed",
+      "feature": "units",
+      "evidence": "documentation",
+      "source": "PhyxCalc/doc/doc_en.txt",
+      "steps": [
+        {
+          "input": "20m/s -> km/h",
+          "expect": {
+            "kind": "display",
+            "text": "72km/h"
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "72km/h",
+            "input": "20m/s -> km/h",
+            "kind": "display",
+            "raw": {
+              "imaginary": "0",
+              "real": "72.000000000000000062",
+              "unit": "km/h"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "number-to-hex",
+      "feature": "numbers",
+      "evidence": "documentation",
+      "source": "PhyxCalc/doc/doc_en.txt",
+      "steps": [
+        {
+          "input": "23->hex",
+          "expect": {
+            "kind": "display",
+            "text": "0x17"
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "0x17",
+            "input": "23->hex",
+            "kind": "display"
+          }
+        ]
+      }
+    },
+    {
+      "id": "list-addition",
+      "feature": "lists",
+      "evidence": "documentation",
+      "source": "PhyxCalc/doc/doc_en.txt",
+      "steps": [
+        {
+          "input": "12+",
+          "expect": {
+            "kind": "silent"
+          }
+        },
+        {
+          "input": "4",
+          "expect": {
+            "kind": "silent"
+          }
+        },
+        {
+          "input": "3",
+          "expect": {
+            "kind": "silent"
+          }
+        },
+        {
+          "input": "5",
+          "expect": {
+            "kind": "silent"
+          }
+        },
+        {
+          "input": "",
+          "expect": {
+            "kind": "value",
+            "real": "24",
+            "imaginary": "0",
+            "unit": ""
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "",
+            "input": "12+",
+            "kind": "silent"
+          },
+          {
+            "display": "",
+            "input": "4",
+            "kind": "silent"
+          },
+          {
+            "display": "",
+            "input": "3",
+            "kind": "silent"
+          },
+          {
+            "display": "",
+            "input": "5",
+            "kind": "silent"
+          },
+          {
+            "display": "24",
+            "input": "",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "24",
+              "unit": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "cube-shorthand-probe",
+      "feature": "operators",
+      "evidence": "probe",
+      "source": "PhyxCalc/settings/grammar.txt",
+      "steps": [
+        {
+          "input": "2³",
+          "expect": {
+            "kind": "probe",
+            "question": "Record whether the superscript cube follows valuePush2 or valuePush3; compare with 2^3 and (2)^3."
+          }
+        },
+        {
+          "input": "2^3",
+          "expect": {
+            "kind": "value",
+            "real": "8",
+            "imaginary": "0",
+            "unit": ""
+          }
+        },
+        {
+          "input": "(2)^3",
+          "expect": {
+            "kind": "value",
+            "real": "8",
+            "imaginary": "0",
+            "unit": ""
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "8",
+            "input": "2³",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "8",
+              "unit": ""
+            }
+          },
+          {
+            "display": "8",
+            "input": "2^3",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "8",
+              "unit": ""
+            }
+          },
+          {
+            "display": "8",
+            "input": "(2)^3",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "8",
+              "unit": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "power-associativity-probe",
+      "feature": "operators",
+      "evidence": "probe",
+      "source": "PhyxCalc/settings/grammar.txt",
+      "steps": [
+        {
+          "input": "2^3^2",
+          "expect": {
+            "kind": "probe",
+            "question": "Record result and compare with (2^3)^2 and 2^(3^2); do not infer associativity from common math conventions."
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "64",
+            "input": "2^3^2",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "64",
+              "unit": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "unary-and-factorial",
+      "feature": "operators",
+      "evidence": "source-derived",
+      "source": "PhyxCalc/settings/grammar.txt",
+      "steps": [
+        {
+          "input": "-3+5",
+          "expect": {
+            "kind": "value",
+            "real": "2",
+            "imaginary": "0",
+            "unit": ""
+          }
+        },
+        {
+          "input": "5!",
+          "expect": {
+            "kind": "value",
+            "real": "120",
+            "imaginary": "0",
+            "unit": ""
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "2",
+            "input": "-3+5",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "2",
+              "unit": ""
+            }
+          },
+          {
+            "display": "120",
+            "input": "5!",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "120",
+              "unit": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "function-shorthand",
+      "feature": "shorthand",
+      "evidence": "source-derived",
+      "source": "PhyxCalc/settings/grammar.txt",
+      "steps": [
+        {
+          "input": "sqr16",
+          "expect": {
+            "kind": "value",
+            "real": "4",
+            "imaginary": "0",
+            "unit": ""
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "4",
+            "input": "sqr16",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "4",
+              "unit": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "implicit-multiplication-probe",
+      "feature": "shorthand",
+      "evidence": "probe",
+      "source": "PhyxCalc/settings/grammar.txt",
+      "steps": [
+        {
+          "input": "2pi",
+          "expect": {
+            "kind": "probe",
+            "question": "Record selected-symbol multiplication support."
+          }
+        },
+        {
+          "input": "2(3+4)",
+          "expect": {
+            "kind": "probe",
+            "question": "Record bracket juxtaposition rejection or acceptance separately."
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "6.28319",
+            "input": "2pi",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "6.283185307179586477",
+              "unit": ""
+            }
+          },
+          {
+            "display": "error at position 0-2: Syntax Error!",
+            "error": {
+              "code": "SyntaxError",
+              "endPosition": 2,
+              "errorNumber": 0,
+              "message": "error at position 0-2: Syntax Error!",
+              "startPosition": 0
+            },
+            "input": "2(3+4)",
+            "kind": "error"
+          }
+        ]
+      }
+    },
+    {
+      "id": "whitespace-and-line-comment",
+      "feature": "comments",
+      "evidence": "source-derived",
+      "source": "PhyxCalc/phyxcalculator.cpp",
+      "steps": [
+        {
+          "input": " 2 + 3 // ignored",
+          "expect": {
+            "kind": "value",
+            "real": "5",
+            "imaginary": "0",
+            "unit": ""
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "5",
+            "input": " 2 + 3 // ignored",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "5",
+              "unit": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "inline-block-comment-probe",
+      "feature": "comments",
+      "evidence": "probe",
+      "source": "PhyxCalc/phyxcalculator.cpp",
+      "steps": [
+        {
+          "input": "1/* note */+2",
+          "expect": {
+            "kind": "probe",
+            "question": "Record the legacy truncation behavior separately from the desired mathematical result 3."
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "1",
+            "input": "1/* note */+2",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "1",
+              "unit": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "multiline-comment-probe",
+      "feature": "comments",
+      "evidence": "probe",
+      "source": "PhyxCalc/lineparser.cpp",
+      "safety": "Run in the worksheet with an external timeout and disposable state; possible editor hang.",
+      "steps": [
+        {
+          "input": "2 /* first\ncontinued */ +3",
+          "expect": {
+            "kind": "probe",
+            "question": "Capture behavior by worksheet line and after full recalculation; engine-only evaluation is not equivalent."
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "2",
+            "input": "2 /* first\ncontinued */ +3",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "2",
+              "unit": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "mixed-number-bases",
+      "feature": "numbers",
+      "evidence": "source-derived",
+      "source": "PhyxCalc/settings/grammar.txt",
+      "steps": [
+        {
+          "input": "0x10+0o10+0b10",
+          "expect": {
+            "kind": "value",
+            "real": "26",
+            "imaginary": "0",
+            "unit": ""
+          }
+        },
+        {
+          "input": ".5+1e-3",
+          "expect": {
+            "kind": "value",
+            "real": "0.501",
+            "imaginary": "0",
+            "unit": ""
+          }
+        },
+        {
+          "input": "10->bin",
+          "expect": {
+            "kind": "display",
+            "text": "0b00001010"
+          }
+        },
+        {
+          "input": "34->oct",
+          "expect": {
+            "kind": "display",
+            "text": "0o42"
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "26",
+            "input": "0x10+0o10+0b10",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "26",
+              "unit": ""
+            }
+          },
+          {
+            "display": "0.501",
+            "input": ".5+1e-3",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "0.50100000000000000002",
+              "unit": ""
+            }
+          },
+          {
+            "display": "0b00001010",
+            "input": "10->bin",
+            "kind": "display"
+          },
+          {
+            "display": "0o42",
+            "input": "34->oct",
+            "kind": "display"
+          }
+        ]
+      }
+    },
+    {
+      "id": "bcd-roundtrip",
+      "feature": "numbers",
+      "evidence": "source-derived",
+      "source": "PhyxCalc/phyxcalculator.cpp",
+      "steps": [
+        {
+          "input": "bcd(tobcd(42))",
+          "expect": {
+            "kind": "value",
+            "real": "42",
+            "imaginary": "0",
+            "unit": ""
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "42",
+            "input": "bcd(tobcd(42))",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "42",
+              "unit": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "integer-width-probe",
+      "feature": "numbers",
+      "evidence": "probe",
+      "source": "PhyxCalc/global.h",
+      "steps": [
+        {
+          "input": "1<<40",
+          "expect": {
+            "kind": "probe",
+            "question": "Record long int width before interpreting this platform-dependent shift; do not make undefined behavior a portable requirement."
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "1.09951e+12",
+            "input": "1<<40",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "1099511627776",
+              "unit": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "complex-arithmetic",
+      "feature": "complex",
+      "evidence": "source-derived",
+      "source": "PhyxCalc/settings/grammar.txt",
+      "steps": [
+        {
+          "input": "(1+2j)*(3-4i)",
+          "expect": {
+            "kind": "value",
+            "real": "11",
+            "imaginary": "2",
+            "unit": ""
+          }
+        },
+        {
+          "input": "Re(3+4j)",
+          "expect": {
+            "kind": "value",
+            "real": "3",
+            "imaginary": "0",
+            "unit": ""
+          }
+        },
+        {
+          "input": "Im(3+4j)",
+          "expect": {
+            "kind": "value",
+            "real": "4",
+            "imaginary": "0",
+            "unit": ""
+          }
+        },
+        {
+          "input": "norm(3+4j)",
+          "expect": {
+            "kind": "value",
+            "real": "25",
+            "imaginary": "0",
+            "unit": ""
+          }
+        },
+        {
+          "input": "conj(3+4j)",
+          "expect": {
+            "kind": "value",
+            "real": "3",
+            "imaginary": "-4",
+            "unit": ""
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "11+2j",
+            "input": "(1+2j)*(3-4i)",
+            "kind": "value",
+            "raw": {
+              "imaginary": "2",
+              "real": "11",
+              "unit": ""
+            }
+          },
+          {
+            "display": "3",
+            "input": "Re(3+4j)",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "3",
+              "unit": ""
+            }
+          },
+          {
+            "display": "4",
+            "input": "Im(3+4j)",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "4",
+              "unit": ""
+            }
+          },
+          {
+            "display": "25",
+            "input": "norm(3+4j)",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "25",
+              "unit": ""
+            }
+          },
+          {
+            "display": "3-4j",
+            "input": "conj(3+4j)",
+            "kind": "value",
+            "raw": {
+              "imaginary": "-4",
+              "real": "3",
+              "unit": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "trigonometry-and-aliases",
+      "feature": "functions",
+      "evidence": "source-derived",
+      "source": "PhyxCalc/settings/grammar.txt",
+      "steps": [
+        {
+          "input": "sin(pi/2)",
+          "expect": {
+            "kind": "value",
+            "real": "1",
+            "imaginary": "0",
+            "unit": ""
+          }
+        },
+        {
+          "input": "SIN(0)",
+          "expect": {
+            "kind": "value",
+            "real": "0",
+            "imaginary": "0",
+            "unit": ""
+          }
+        },
+        {
+          "input": "cosh(0)",
+          "expect": {
+            "kind": "value",
+            "real": "1",
+            "imaginary": "0",
+            "unit": ""
+          }
+        },
+        {
+          "input": "asin(0)",
+          "expect": {
+            "kind": "value",
+            "real": "0",
+            "imaginary": "0",
+            "unit": ""
+          }
+        },
+        {
+          "input": "sin(90°)",
+          "expect": {
+            "kind": "value",
+            "real": "1",
+            "imaginary": "0",
+            "unit": ""
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "1",
+            "input": "sin(pi/2)",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "1",
+              "unit": ""
+            }
+          },
+          {
+            "display": "0",
+            "input": "SIN(0)",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "0",
+              "unit": ""
+            }
+          },
+          {
+            "display": "1",
+            "input": "cosh(0)",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "1",
+              "unit": ""
+            }
+          },
+          {
+            "display": "0",
+            "input": "asin(0)",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "0",
+              "unit": ""
+            }
+          },
+          {
+            "display": "1",
+            "input": "sin(90°)",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "1",
+              "unit": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "logarithms-and-roots",
+      "feature": "functions",
+      "evidence": "source-derived",
+      "source": "PhyxCalc/settings/grammar.txt",
+      "steps": [
+        {
+          "input": "log2(1024)",
+          "expect": {
+            "kind": "value",
+            "real": "10",
+            "imaginary": "0",
+            "unit": ""
+          }
+        },
+        {
+          "input": "root3(27)",
+          "expect": {
+            "kind": "value",
+            "real": "3",
+            "imaginary": "0",
+            "unit": ""
+          }
+        },
+        {
+          "input": "ln(exp(2))",
+          "expect": {
+            "kind": "value",
+            "real": "2",
+            "imaginary": "0",
+            "unit": ""
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "10",
+            "input": "log2(1024)",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "10",
+              "unit": ""
+            }
+          },
+          {
+            "display": "3",
+            "input": "root3(27)",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "3",
+              "unit": ""
+            }
+          },
+          {
+            "display": "2",
+            "input": "ln(exp(2))",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "2",
+              "unit": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "rounding-and-extrema",
+      "feature": "rounding",
+      "evidence": "source-derived",
+      "source": "PhyxCalc/settings/grammar.txt",
+      "steps": [
+        {
+          "input": "floor(2.9)",
+          "expect": {
+            "kind": "value",
+            "real": "2",
+            "imaginary": "0",
+            "unit": ""
+          }
+        },
+        {
+          "input": "ceil(2.1)",
+          "expect": {
+            "kind": "value",
+            "real": "3",
+            "imaginary": "0",
+            "unit": ""
+          }
+        },
+        {
+          "input": "min(3,5)",
+          "expect": {
+            "kind": "value",
+            "real": "3",
+            "imaginary": "0",
+            "unit": ""
+          }
+        },
+        {
+          "input": "max(3,5)",
+          "expect": {
+            "kind": "value",
+            "real": "5",
+            "imaginary": "0",
+            "unit": ""
+          }
+        },
+        {
+          "input": "avg(2,4)",
+          "expect": {
+            "kind": "value",
+            "real": "3",
+            "imaginary": "0",
+            "unit": ""
+          }
+        },
+        {
+          "input": "gcd(12,18)",
+          "expect": {
+            "kind": "value",
+            "real": "6",
+            "imaginary": "0",
+            "unit": ""
+          }
+        },
+        {
+          "input": "lcm(4,6)",
+          "expect": {
+            "kind": "value",
+            "real": "12",
+            "imaginary": "0",
+            "unit": ""
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "2",
+            "input": "floor(2.9)",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "2",
+              "unit": ""
+            }
+          },
+          {
+            "display": "3",
+            "input": "ceil(2.1)",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "3",
+              "unit": ""
+            }
+          },
+          {
+            "display": "3",
+            "input": "min(3,5)",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "3",
+              "unit": ""
+            }
+          },
+          {
+            "display": "5",
+            "input": "max(3,5)",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "5",
+              "unit": ""
+            }
+          },
+          {
+            "display": "3",
+            "input": "avg(2,4)",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "3",
+              "unit": ""
+            }
+          },
+          {
+            "display": "6",
+            "input": "gcd(12,18)",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "6",
+              "unit": ""
+            }
+          },
+          {
+            "display": "12",
+            "input": "lcm(4,6)",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "12",
+              "unit": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "rounding-boundaries-probe",
+      "feature": "rounding",
+      "evidence": "probe",
+      "source": "PhyxCalc/phyxcalculator.cpp",
+      "steps": [
+        {
+          "input": "round(-2.5)",
+          "expect": {
+            "kind": "probe",
+            "question": "Record tie-breaking for positive and negative halves; compare int/trunc/sign/heaviside at zero and around zero."
+          }
+        },
+        {
+          "input": "int(-2.9)",
+          "expect": {
+            "kind": "probe",
+            "question": "Check int versus trunc rather than assuming the help's equivalence."
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "-3",
+            "input": "round(-2.5)",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "-3",
+              "unit": ""
+            }
+          },
+          {
+            "display": "-2",
+            "input": "int(-2.9)",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "-2",
+              "unit": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "random-distribution-probe",
+      "feature": "random",
+      "evidence": "probe",
+      "source": "PhyxCalc/phyxcalculator.cpp",
+      "steps": [
+        {
+          "input": "rand()",
+          "expect": {
+            "kind": "probe",
+            "question": "Repeat and check documented range 0 to 1, recording whether endpoints occur; no exact sample expectation."
+          }
+        },
+        {
+          "input": "randi(10)",
+          "expect": {
+            "kind": "probe",
+            "question": "Repeat and check integral 0 <= result < 10."
+          }
+        },
+        {
+          "input": "randg(0,1)",
+          "expect": {
+            "kind": "probe",
+            "question": "Capture seed/runtime details and distribution sanity over repeated runs, not a single expected value."
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "0.272806",
+            "input": "rand()",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "0.27280649136416916333",
+              "unit": ""
+            }
+          },
+          {
+            "display": "6",
+            "input": "randi(10)",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "6",
+              "unit": ""
+            }
+          },
+          {
+            "display": "-0.78568",
+            "input": "randg(0,1)",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "-0.78568048979047677705",
+              "unit": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "logic-and-bits",
+      "feature": "logic",
+      "evidence": "source-derived",
+      "source": "PhyxCalc/settings/grammar.txt",
+      "steps": [
+        {
+          "input": "3<4",
+          "expect": {
+            "kind": "value",
+            "real": "1",
+            "imaginary": "0",
+            "unit": ""
+          }
+        },
+        {
+          "input": "3==4",
+          "expect": {
+            "kind": "value",
+            "real": "0",
+            "imaginary": "0",
+            "unit": ""
+          }
+        },
+        {
+          "input": "1AND0",
+          "expect": {
+            "kind": "value",
+            "real": "0",
+            "imaginary": "0",
+            "unit": ""
+          }
+        },
+        {
+          "input": "1OR0",
+          "expect": {
+            "kind": "value",
+            "real": "1",
+            "imaginary": "0",
+            "unit": ""
+          }
+        },
+        {
+          "input": "6&3",
+          "expect": {
+            "kind": "value",
+            "real": "2",
+            "imaginary": "0",
+            "unit": ""
+          }
+        },
+        {
+          "input": "1<<3",
+          "expect": {
+            "kind": "value",
+            "real": "8",
+            "imaginary": "0",
+            "unit": ""
+          }
+        },
+        {
+          "input": "17mod5",
+          "expect": {
+            "kind": "value",
+            "real": "2",
+            "imaginary": "0",
+            "unit": ""
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "1",
+            "input": "3<4",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "1",
+              "unit": ""
+            }
+          },
+          {
+            "display": "0",
+            "input": "3==4",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "0",
+              "unit": ""
+            }
+          },
+          {
+            "display": "0",
+            "input": "1AND0",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "0",
+              "unit": ""
+            }
+          },
+          {
+            "display": "1",
+            "input": "1OR0",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "1",
+              "unit": ""
+            }
+          },
+          {
+            "display": "2",
+            "input": "6&3",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "2",
+              "unit": ""
+            }
+          },
+          {
+            "display": "8",
+            "input": "1<<3",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "8",
+              "unit": ""
+            }
+          },
+          {
+            "display": "2",
+            "input": "17mod5",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "2",
+              "unit": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "conditional-forms",
+      "feature": "conditionals",
+      "evidence": "source-derived",
+      "source": "PhyxCalc/settings/grammar.txt",
+      "steps": [
+        {
+          "input": "1?2:3",
+          "expect": {
+            "kind": "value",
+            "real": "2",
+            "imaginary": "0",
+            "unit": ""
+          }
+        },
+        {
+          "input": "if0then2else3",
+          "expect": {
+            "kind": "value",
+            "real": "3",
+            "imaginary": "0",
+            "unit": ""
+          }
+        },
+        {
+          "input": "IF(0;2;3)",
+          "expect": {
+            "kind": "value",
+            "real": "3",
+            "imaginary": "0",
+            "unit": ""
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "2",
+            "input": "1?2:3",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "2",
+              "unit": ""
+            }
+          },
+          {
+            "display": "3",
+            "input": "if0then2else3",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "3",
+              "unit": ""
+            }
+          },
+          {
+            "display": "3",
+            "input": "IF(0;2;3)",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "3",
+              "unit": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "conditional-evaluation-probe",
+      "feature": "conditionals",
+      "evidence": "probe",
+      "source": "PhyxCalc/phyxcalculator.cpp",
+      "steps": [
+        {
+          "input": "1?2:sin(1m)",
+          "expect": {
+            "kind": "probe",
+            "question": "Determine whether an unselected erroneous branch is still evaluated; do not assume JavaScript-style short circuiting."
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "error at position 4-11: Unit is not dimensionless",
+            "error": {
+              "code": "UnitNotDimensionlessError",
+              "endPosition": 11,
+              "errorNumber": 2,
+              "message": "error at position 4-11: Unit is not dimensionless",
+              "startPosition": 4
+            },
+            "input": "1?2:sin(1m)",
+            "kind": "error"
+          }
+        ]
+      }
+    },
+    {
+      "id": "variable-and-constant",
+      "feature": "state",
+      "evidence": "source-derived",
+      "source": "PhyxCalc/settings/grammar.txt",
+      "steps": [
+        {
+          "input": "testValue=2",
+          "expect": {
+            "kind": "silent"
+          }
+        },
+        {
+          "input": "testValue+3",
+          "expect": {
+            "kind": "value",
+            "real": "5",
+            "imaginary": "0",
+            "unit": ""
+          }
+        },
+        {
+          "input": "testConstant:=7",
+          "expect": {
+            "kind": "silent"
+          }
+        },
+        {
+          "input": "testConstant_",
+          "expect": {
+            "kind": "value",
+            "real": "7",
+            "imaginary": "0",
+            "unit": ""
+          }
+        },
+        {
+          "input": "testValue=",
+          "expect": {
+            "kind": "silent"
+          }
+        },
+        {
+          "input": "testConstant:=",
+          "expect": {
+            "kind": "silent"
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "",
+            "input": "testValue=2",
+            "kind": "silent"
+          },
+          {
+            "display": "5",
+            "input": "testValue+3",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "5",
+              "unit": ""
+            }
+          },
+          {
+            "display": "",
+            "input": "testConstant:=7",
+            "kind": "silent"
+          },
+          {
+            "display": "7",
+            "input": "testConstant_",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "7",
+              "unit": ""
+            }
+          },
+          {
+            "display": "",
+            "input": "testValue=",
+            "kind": "silent"
+          },
+          {
+            "display": "",
+            "input": "testConstant:=",
+            "kind": "silent"
+          }
+        ]
+      }
+    },
+    {
+      "id": "custom-function",
+      "feature": "state",
+      "evidence": "documentation",
+      "source": "PhyxCalc/doc/doc_en.txt",
+      "steps": [
+        {
+          "input": "doubleval(x)=x*2",
+          "expect": {
+            "kind": "silent"
+          }
+        },
+        {
+          "input": "doubleval(3)",
+          "expect": {
+            "kind": "value",
+            "real": "6",
+            "imaginary": "0",
+            "unit": ""
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "",
+            "input": "doubleval(x)=x*2",
+            "kind": "silent"
+          },
+          {
+            "display": "6",
+            "input": "doubleval(3)",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "6",
+              "unit": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "state-scope-removal-probe",
+      "feature": "state",
+      "evidence": "probe",
+      "source": "PhyxCalc/phyxcalculator.cpp",
+      "steps": [
+        {
+          "input": "doubleval(x)=x*2",
+          "expect": {
+            "kind": "silent"
+          }
+        },
+        {
+          "input": "doubleval=",
+          "expect": {
+            "kind": "probe",
+            "question": "Record actual custom-function deletion syntax and whether arity is required."
+          }
+        },
+        {
+          "input": "doubleval(3)",
+          "expect": {
+            "kind": "probe",
+            "question": "Record error and whether the function and local parameters were removed."
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "",
+            "input": "doubleval(x)=x*2",
+            "kind": "silent"
+          },
+          {
+            "display": "error at position 0-16: Syntax Error!",
+            "error": {
+              "code": "SyntaxError",
+              "endPosition": 16,
+              "errorNumber": 0,
+              "message": "error at position 0-16: Syntax Error!",
+              "startPosition": 0
+            },
+            "input": "doubleval=",
+            "kind": "error"
+          },
+          {
+            "display": "6",
+            "input": "doubleval(3)",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "6",
+              "unit": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "compound-assignments-probe",
+      "feature": "assignments",
+      "evidence": "probe",
+      "source": "PhyxCalc/settings/grammar.txt",
+      "steps": [
+        {
+          "input": "counterValue=2",
+          "expect": {
+            "kind": "silent"
+          }
+        },
+        {
+          "input": "counterValue+=3",
+          "expect": {
+            "kind": "probe",
+            "question": "Record output suppression and stored value for each compound assignment form."
+          }
+        },
+        {
+          "input": "counterValue++",
+          "expect": {
+            "kind": "probe",
+            "question": "Record postfix returned/stored value; compare prefix increment/decrement."
+          }
+        },
+        {
+          "input": "counterValue=2,counterValue+=3,counterValue",
+          "expect": {
+            "kind": "probe",
+            "question": "Record comma sequencing outputs and side-effect order."
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "",
+            "input": "counterValue=2",
+            "kind": "silent"
+          },
+          {
+            "display": "",
+            "input": "counterValue+=3",
+            "kind": "silent"
+          },
+          {
+            "display": "5",
+            "input": "counterValue++",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "5",
+              "unit": ""
+            }
+          },
+          {
+            "display": "6",
+            "input": "counterValue=2,counterValue+=3,counterValue",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "6",
+              "unit": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "last-answer",
+      "feature": "answer",
+      "evidence": "documentation",
+      "source": "PhyxCalc/doc/doc_en.txt",
+      "steps": [
+        {
+          "input": "5+4",
+          "expect": {
+            "kind": "value",
+            "real": "9",
+            "imaginary": "0",
+            "unit": ""
+          }
+        },
+        {
+          "input": "#+sqr(#)",
+          "expect": {
+            "kind": "value",
+            "real": "12",
+            "imaginary": "0",
+            "unit": ""
+          }
+        },
+        {
+          "input": "ans()",
+          "expect": {
+            "kind": "value",
+            "real": "12",
+            "imaginary": "0",
+            "unit": ""
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "9",
+            "input": "5+4",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "9",
+              "unit": ""
+            }
+          },
+          {
+            "display": "12",
+            "input": "#+sqr(#)",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "12",
+              "unit": ""
+            }
+          },
+          {
+            "display": "12",
+            "input": "ans()",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "12",
+              "unit": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "list-independent-terms",
+      "feature": "lists",
+      "evidence": "documentation",
+      "source": "PhyxCalc/doc/doc_en.txt",
+      "steps": [
+        {
+          "input": "2*",
+          "expect": {
+            "kind": "silent"
+          }
+        },
+        {
+          "input": "2+3",
+          "expect": {
+            "kind": "silent"
+          }
+        },
+        {
+          "input": "",
+          "expect": {
+            "kind": "value",
+            "real": "10",
+            "imaginary": "0",
+            "unit": ""
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "",
+            "input": "2*",
+            "kind": "silent"
+          },
+          {
+            "display": "",
+            "input": "2+3",
+            "kind": "silent"
+          },
+          {
+            "display": "10",
+            "input": "",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "10",
+              "unit": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "list-other-operators-probe",
+      "feature": "lists",
+      "evidence": "probe",
+      "source": "PhyxCalc/settings/grammar.txt",
+      "steps": [
+        {
+          "input": "12-",
+          "expect": {
+            "kind": "silent"
+          }
+        },
+        {
+          "input": "4",
+          "expect": {
+            "kind": "silent"
+          }
+        },
+        {
+          "input": "",
+          "expect": {
+            "kind": "probe",
+            "question": "Record subtraction fold order; repeat with division, powers, modulo, logical and bitwise list starters."
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "",
+            "input": "12-",
+            "kind": "silent"
+          },
+          {
+            "display": "",
+            "input": "4",
+            "kind": "silent"
+          },
+          {
+            "display": "8",
+            "input": "",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "8",
+              "unit": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "unit-addition",
+      "feature": "units",
+      "evidence": "source-derived",
+      "source": "PhyxCalc/phyxcompoundunit.cpp",
+      "steps": [
+        {
+          "input": "1m+100cm",
+          "expect": {
+            "kind": "value",
+            "real": "2",
+            "imaginary": "0",
+            "unit": "m"
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "2m",
+            "input": "1m+100cm",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "2",
+              "unit": "m"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "unit-power-root-probe",
+      "feature": "units",
+      "evidence": "probe",
+      "source": "PhyxCalc/phyxcompoundunit.cpp",
+      "steps": [
+        {
+          "input": "(2m)*(3m)",
+          "expect": {
+            "kind": "probe",
+            "question": "Check area dimension, numeric value 6 and actual compound-unit rendering."
+          }
+        },
+        {
+          "input": "sqrt(4m^2)",
+          "expect": {
+            "kind": "probe",
+            "question": "Check length dimension and value 2; retain exact rendering."
+          }
+        },
+        {
+          "input": "1N*m->J",
+          "expect": {
+            "kind": "probe",
+            "question": "Check derived-unit reduction and explicit output symbol."
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "6m²",
+            "input": "(2m)*(3m)",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "6",
+              "unit": "m²"
+            }
+          },
+          {
+            "display": "2m",
+            "input": "sqrt(4m^2)",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "2",
+              "unit": "m"
+            }
+          },
+          {
+            "display": "1J",
+            "input": "1N*m->J",
+            "kind": "display",
+            "raw": {
+              "imaginary": "0",
+              "real": "1",
+              "unit": "J"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "offset-temperature-probe",
+      "feature": "units",
+      "evidence": "probe",
+      "source": "PhyxCalc/settings/definitions.txt",
+      "steps": [
+        {
+          "input": "0°C->K",
+          "expect": {
+            "kind": "probe",
+            "question": "Compare observed value with physical expectation 273.15 K; capture offset behavior before approving a fix."
+          }
+        },
+        {
+          "input": "32°F->°C",
+          "expect": {
+            "kind": "probe",
+            "question": "Compare observed value with 0 degrees Celsius and inspect display/offset rounding."
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "273.15K",
+            "input": "0°C->K",
+            "kind": "display",
+            "raw": {
+              "imaginary": "0",
+              "real": "273.14999999999999999",
+              "unit": "K"
+            }
+          },
+          {
+            "display": "0.466604°C",
+            "input": "32°F->°C",
+            "kind": "display",
+            "raw": {
+              "imaginary": "0",
+              "real": "0.46660373144933715156",
+              "unit": "°C"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "custom-unit-system-probe",
+      "feature": "unit-definitions",
+      "evidence": "probe",
+      "source": "PhyxCalc/settings/grammar.txt",
+      "steps": [
+        {
+          "input": "[customsystem]",
+          "expect": {
+            "kind": "silent"
+          }
+        },
+        {
+          "input": "widgetunit@customsystem=[]",
+          "expect": {
+            "kind": "silent"
+          }
+        },
+        {
+          "input": "k:customsystem=[1000]",
+          "expect": {
+            "kind": "silent"
+          }
+        },
+        {
+          "input": "2kwidgetunit->widgetunit",
+          "expect": {
+            "kind": "probe",
+            "question": "Record custom-prefix registration, conversion to 2000 widgetunit and output behavior."
+          }
+        },
+        {
+          "input": "[customsystem]:=",
+          "expect": {
+            "kind": "probe",
+            "question": "Record removal behavior for dependent prefixes and units."
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "",
+            "input": "[customsystem]",
+            "kind": "silent"
+          },
+          {
+            "display": "",
+            "input": "widgetunit@customsystem=[]",
+            "kind": "silent"
+          },
+          {
+            "display": "",
+            "input": "k:customsystem=[1000]",
+            "kind": "silent"
+          },
+          {
+            "display": "2000widgetunit",
+            "input": "2kwidgetunit->widgetunit",
+            "kind": "display",
+            "raw": {
+              "imaginary": "0",
+              "real": "2000",
+              "unit": "widgetunit"
+            }
+          },
+          {
+            "display": "",
+            "input": "[customsystem]:=",
+            "kind": "silent"
+          }
+        ]
+      }
+    },
+    {
+      "id": "strip-unit",
+      "feature": "unit-definitions",
+      "evidence": "source-derived",
+      "source": "PhyxCalc/settings/grammar.txt",
+      "steps": [
+        {
+          "input": "{3m}",
+          "expect": {
+            "kind": "value",
+            "real": "3",
+            "imaginary": "0",
+            "unit": ""
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "3",
+            "input": "{3m}",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "3",
+              "unit": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "startup-constants-and-information-probe",
+      "feature": "definitions",
+      "evidence": "probe",
+      "source": "PhyxCalc/settings/definitions.txt",
+      "steps": [
+        {
+          "input": "c0_",
+          "expect": {
+            "kind": "probe",
+            "question": "Verify loaded speed-of-light constant, value 299792458 m/s and output prefix."
+          }
+        },
+        {
+          "input": "1KiB->B",
+          "expect": {
+            "kind": "probe",
+            "question": "Verify binary prefix gives 1024 bytes; compare 1kB and the separate bps prefix system."
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "2.99792e+08m/s",
+            "input": "c0_",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "299792458",
+              "unit": "m/s"
+            }
+          },
+          {
+            "display": "1024B",
+            "input": "1KiB->B",
+            "kind": "display",
+            "raw": {
+              "imaginary": "0",
+              "real": "1024",
+              "unit": "B"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "default-display",
+      "feature": "formatting",
+      "evidence": "source-derived",
+      "source": "PhyxCalc/phyxcalculator.cpp",
+      "steps": [
+        {
+          "input": "1/3",
+          "expect": {
+            "kind": "display",
+            "text": "0.333333"
+          }
+        },
+        {
+          "input": "3+4i",
+          "expect": {
+            "kind": "display",
+            "text": "3+4j"
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "0.333333",
+            "input": "1/3",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "0.33333333333333333334",
+              "unit": ""
+            }
+          },
+          {
+            "display": "3+4j",
+            "input": "3+4i",
+            "kind": "value",
+            "raw": {
+              "imaginary": "4",
+              "real": "3",
+              "unit": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "fraction-display-probe",
+      "feature": "formatting",
+      "evidence": "probe",
+      "source": "PhyxCalc/phyxcalculator.cpp",
+      "settings": {
+        "useFractions": true
+      },
+      "steps": [
+        {
+          "input": "1/3",
+          "expect": {
+            "kind": "probe",
+            "question": "Record fraction output under enabled fractions; compare complex fractions and precision-dependent approximation."
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": true
+        },
+        "steps": [
+          {
+            "display": "1/1e+18",
+            "input": "1/3",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "0.33333333333333333334",
+              "unit": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "unit-output-modes-probe",
+      "feature": "formatting",
+      "evidence": "probe",
+      "source": "PhyxCalc/phyxcalculator.cpp",
+      "steps": [
+        {
+          "input": "1000m",
+          "expect": {
+            "kind": "probe",
+            "question": "Repeat under unit modes 1/2/3 and prefix modes 1/2; capture actual symbols and equivalent physical values."
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "1km",
+            "input": "1000m",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "1000",
+              "unit": "m"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "error-incompatible-units",
+      "feature": "errors",
+      "evidence": "source-derived",
+      "source": "PhyxCalc/settings/grammar.txt",
+      "steps": [
+        {
+          "input": "1m+1s",
+          "expect": {
+            "kind": "error",
+            "code": "UnitsNotConvertibleError"
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "error at position 0-5: Units not convertible",
+            "error": {
+              "code": "UnitsNotConvertibleError",
+              "endPosition": 5,
+              "errorNumber": 1,
+              "message": "error at position 0-5: Units not convertible",
+              "startPosition": 0
+            },
+            "input": "1m+1s",
+            "kind": "error"
+          }
+        ]
+      }
+    },
+    {
+      "id": "error-dimensionful-function",
+      "feature": "errors",
+      "evidence": "source-derived",
+      "source": "PhyxCalc/settings/grammar.txt",
+      "steps": [
+        {
+          "input": "sin(1m)",
+          "expect": {
+            "kind": "error",
+            "code": "UnitNotDimensionlessError"
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "error at position 0-7: Unit is not dimensionless",
+            "error": {
+              "code": "UnitNotDimensionlessError",
+              "endPosition": 7,
+              "errorNumber": 2,
+              "message": "error at position 0-7: Unit is not dimensionless",
+              "startPosition": 0
+            },
+            "input": "sin(1m)",
+            "kind": "error"
+          }
+        ]
+      }
+    },
+    {
+      "id": "error-noninteger-base-conversion",
+      "feature": "errors",
+      "evidence": "source-derived",
+      "source": "PhyxCalc/settings/grammar.txt",
+      "steps": [
+        {
+          "input": "1.5->hex",
+          "expect": {
+            "kind": "error",
+            "code": "ValueNotIntegerError"
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "error at position 0-8: Only integer values",
+            "error": {
+              "code": "ValueNotIntegerError",
+              "endPosition": 8,
+              "errorNumber": 4,
+              "message": "error at position 0-8: Only integer values",
+              "startPosition": 0
+            },
+            "input": "1.5->hex",
+            "kind": "error"
+          }
+        ]
+      }
+    },
+    {
+      "id": "error-negative-integer-domain",
+      "feature": "errors",
+      "evidence": "source-derived",
+      "source": "PhyxCalc/settings/grammar.txt",
+      "steps": [
+        {
+          "input": "randi(-1)",
+          "expect": {
+            "kind": "error",
+            "code": "ValueNotPositiveError"
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "error at position 0-9: Value is negative",
+            "error": {
+              "code": "ValueNotPositiveError",
+              "endPosition": 9,
+              "errorNumber": 3,
+              "message": "error at position 0-9: Value is negative",
+              "startPosition": 0
+            },
+            "input": "randi(-1)",
+            "kind": "error"
+          }
+        ]
+      }
+    },
+    {
+      "id": "error-complex-domain",
+      "feature": "errors",
+      "evidence": "source-derived",
+      "source": "PhyxCalc/settings/grammar.txt",
+      "steps": [
+        {
+          "input": "floor(1j)",
+          "expect": {
+            "kind": "error",
+            "code": "ValueComplexError"
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "error at position 0-9: Value is complex",
+            "error": {
+              "code": "ValueComplexError",
+              "endPosition": 9,
+              "errorNumber": 5,
+              "message": "error at position 0-9: Value is complex",
+              "startPosition": 0
+            },
+            "input": "floor(1j)",
+            "kind": "error"
+          }
+        ]
+      }
+    },
+    {
+      "id": "error-span-probe",
+      "feature": "errors",
+      "evidence": "probe",
+      "source": "PhyxCalc/phyxcalculator.cpp",
+      "steps": [
+        {
+          "input": "  1m + 2s ",
+          "expect": {
+            "kind": "probe",
+            "question": "Capture class, exact span and message in original-input coordinates; compare editor trimming and engine-only coordinates."
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "error at position 2-9: Units not convertible",
+            "error": {
+              "code": "UnitsNotConvertibleError",
+              "endPosition": 9,
+              "errorNumber": 1,
+              "message": "error at position 2-9: Units not convertible",
+              "startPosition": 2
+            },
+            "input": "  1m + 2s ",
+            "kind": "error"
+          }
+        ]
+      }
+    },
+    {
+      "id": "syntax-and-recovery-probe",
+      "feature": "errors",
+      "evidence": "probe",
+      "source": "PhyxCalc/phyxcalculator.cpp",
+      "steps": [
+        {
+          "input": "2+*3",
+          "expect": {
+            "kind": "error",
+            "code": "SyntaxError"
+          }
+        },
+        {
+          "input": "2+3",
+          "expect": {
+            "kind": "probe",
+            "question": "Verify error-state recovery and correct next result 5."
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "error at position 0-13: Syntax Error!",
+            "error": {
+              "code": "SyntaxError",
+              "endPosition": 13,
+              "errorNumber": 0,
+              "message": "error at position 0-13: Syntax Error!",
+              "startPosition": 0
+            },
+            "input": "2+*3",
+            "kind": "error"
+          },
+          {
+            "display": "5",
+            "input": "2+3",
+            "kind": "value",
+            "raw": {
+              "imaginary": "0",
+              "real": "5",
+              "unit": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "zero-division-probe",
+      "feature": "errors",
+      "evidence": "probe",
+      "source": "PhyxCalc/phyxcalculator.cpp",
+      "safety": "Run in an isolated reference process with a timeout; do not add modulo-zero to an in-process runner.",
+      "steps": [
+        {
+          "input": "1/0",
+          "expect": {
+            "kind": "probe",
+            "question": "Record exception, non-finite result or process failure; no guessed portable behavior."
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "inf-nanj",
+            "input": "1/0",
+            "kind": "value",
+            "raw": {
+              "imaginary": "-nan",
+              "real": "inf",
+              "unit": ""
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "dataset-linear-probe",
+      "feature": "datasets",
+      "evidence": "probe",
+      "source": "PhyxCalc/phyxcalculator.cpp",
+      "steps": [
+        {
+          "input": "data([x^2],x,0,2,1)",
+          "expect": {
+            "kind": "probe",
+            "question": "Record dataset creation, samples, count and units; mathematical target samples are (0,0), (1,1), (2,4), but endpoints need observation."
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "",
+            "input": "data([x^2],x,0,2,1)",
+            "kind": "silent"
+          }
+        ]
+      }
+    },
+    {
+      "id": "dataset-log-explicit-probe",
+      "feature": "datasets",
+      "evidence": "probe",
+      "source": "PhyxCalc/phyxcalculator.cpp",
+      "steps": [
+        {
+          "input": "datalog([x],x,1,100)",
+          "expect": {
+            "kind": "probe",
+            "question": "Capture default logarithmic sample progression, count and endpoints."
+          }
+        },
+        {
+          "input": "datalog([x],x,1,100,10)",
+          "expect": {
+            "kind": "probe",
+            "question": "Compare explicit-step handler's LinearDataset argument with default logarithmic behavior."
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "",
+            "input": "datalog([x],x,1,100)",
+            "kind": "silent"
+          },
+          {
+            "display": "",
+            "input": "datalog([x],x,1,100,10)",
+            "kind": "silent"
+          }
+        ]
+      }
+    },
+    {
+      "id": "dataset-complex-probe",
+      "feature": "datasets",
+      "evidence": "probe",
+      "source": "PhyxCalc/phyxcalculator.cpp",
+      "steps": [
+        {
+          "input": "data([x+j*x],x,0,2,1)",
+          "expect": {
+            "kind": "probe",
+            "question": "Capture both complex components in the data model and what the plot actually displays."
+          }
+        }
+      ],
+      "observation": {
+        "date": "2026-11-04",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "settings": {
+          "decimalPrecision": 6,
+          "imaginaryUnit": "j",
+          "numberFormat": "g",
+          "prefixMode": 1,
+          "unitMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "display": "",
+            "input": "data([x+j*x],x,0,2,1)",
+            "kind": "silent"
+          }
+        ]
+      }
+    },
+    {
+      "id": "dataset-invalid-step-probe",
+      "feature": "datasets",
+      "evidence": "probe",
+      "source": "PhyxCalc/phyxcalculator.cpp",
+      "safety": "Run each input in a separate process with a timeout and bounded memory; invalid steps may loop.",
+      "steps": [
+        {
+          "input": "data([x],x,0,1,0)",
+          "expect": {
+            "kind": "probe",
+            "question": "Record zero-step error/hang behavior safely."
+          }
+        },
+        {
+          "input": "data([x],x,0,1,-1)",
+          "expect": {
+            "kind": "probe",
+            "question": "Record negative-step behavior safely and compare descending ranges."
+          }
+        }
+      ],
+      "observation": {
+        "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+        "platform": {
+          "arch": "x86_64",
+          "compiler": "GCC 15.2.0",
+          "digits10_long_double": 18,
+          "digits_long_double": 64,
+          "os": "Linux (Ubuntu 26.04 LTS)",
+          "qt": "5.15.18",
+          "referenceBuild": "ubuntu-26.04-gcc15-qt5.15-qwt6.1",
+          "sizeof_long_double": 16,
+          "sizeof_long_int": 8
+        },
+        "settings": {
+          "decimalPrecision": 6,
+          "numberFormat": "g",
+          "imaginaryUnit": "j",
+          "unitMode": 1,
+          "prefixMode": 1,
+          "useFractions": false
+        },
+        "steps": [
+          {
+            "input": "data([x],x,0,1,0)",
+            "kind": "probe",
+            "status": "timeout",
+            "display": "hang (unbounded loop in PhyxCalculator::calculateDataset)"
+          },
+          {
+            "input": "data([x],x,0,1,-1)",
+            "kind": "probe",
+            "status": "timeout",
+            "display": "hang (unbounded loop in PhyxCalculator::calculateDataset)"
+          }
+        ],
+        "date": "2026-11-04"
+      }
+    }
+  ]
+}

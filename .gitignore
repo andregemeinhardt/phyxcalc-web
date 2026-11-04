@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+web/node_modules/
+
+# Production builds
+dist/
+web/dist/
+build/
+
+# Vite & Vitest cache
+.vite/
+web/.vite/
+coverage/
+*.log
+
+# System & Editor files
+.DS_Store
+Thumbs.db
+.system_generated/
+.idea/
+.vscode/
+*.swp
+*~

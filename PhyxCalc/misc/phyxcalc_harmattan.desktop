@@ -1,0 +1,14 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Type=Application
+Terminal=false
+Name=PhyxCalc
+GenericName=Physical Expression Calculator
+Comment=Easy to use calculator, especially for physical calculations
+Categories=Qt;Utility;Calculator;Science;
+Exec=/usr/bin/single-instance /opt/PhyxCalc/bin/PhyxCalc
+Icon=/usr/share/icons/hicolor/80x80/apps/phyxcalc80.png
+X-Window-Icon=
+X-HildonDesk-ShowInToolbar=true
+X-Osso-Type=application/x-executable

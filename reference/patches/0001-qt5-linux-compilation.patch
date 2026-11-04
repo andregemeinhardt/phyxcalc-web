@@ -1,0 +1,70 @@
+--- a/PhyxCalc.pro
++++ b/PhyxCalc.pro
+@@ -54,7 +54,7 @@
+                 /usr/include/qwt-qt4    #ubuntu
+ }
+ 
+-LIBS += -lqwt
++exists(/usr/lib/libqwt-qt5.so) { LIBS += -lqwt-qt5 } else { LIBS += -lqwt }
+ 
+ SOURCES += main.cpp\
+         mainwindow.cpp \
+--- a/main.cpp
++++ b/main.cpp
+@@ -17,7 +17,7 @@
+ **
+ ***************************************************************************/
+ 
+-#include <QtGui/QApplication>
++#include <QApplication>
+ #include <QSplashScreen>
+ #include <QTime>
+ #include "mainwindow.h"
+--- a/helpdialog.h
++++ b/helpdialog.h
+@@ -20,6 +20,7 @@
+ #define HELPDIALOG_H
+ 
+ #include <QDialog>
++#include <QIcon>
+ #include <QFile>
+ 
+ namespace Ui {
+--- a/mainwindow.h
++++ b/mainwindow.h
+@@ -21,6 +21,7 @@
+ #define MAINWINDOW_H
+ 
+ #include <QMainWindow>
++#include <QIcon>
+ #include <QList>
+ #include <QSettings>
+ #include <QEvent>
+--- a/plotwindow.h
++++ b/plotwindow.h
+@@ -20,6 +20,7 @@
+ #define PLOTWINDOW_H
+ 
+ #include <QMainWindow>
++#include <QIcon>
+ #include <QFileDialog>
+ #include <QListWidgetItem>
+ #include <QPrinter>
+@@ -32,6 +33,7 @@
+ #include <QCloseEvent>
+ #include <QShowEvent>
+ #include <QRadioButton>
++#include <QButtonGroup>
+ #include <QToolButton>
+ #include <QCheckBox>
+ #include <QSignalMapper>
+--- a/settingsdialog.h
++++ b/settingsdialog.h
+@@ -21,6 +21,7 @@
+ #define SETTINGSDIALOG_H
+ 
+ #include <QDialog>
++#include <QIcon>
+ #include <QColorDialog>
+ #include <QListWidgetItem>
+ #include <QDir>

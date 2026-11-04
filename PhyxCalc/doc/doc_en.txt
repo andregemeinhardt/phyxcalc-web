@@ -1,0 +1,446 @@
+PhyxCalc 3 Help
+================
+:lang: en
+:encoding: utf8
+
+Open Source Software +
+Alexander Rössler <mail.aroessler@gmail.com> +
+Christian Schirm
+
+== Introduction
+PhyxCalc introduces a very flexible and comfortable way to calculate mathematical expressions, including physical units and complex numbers, using a flexible text-editor-like environment. In your expressions you can use a predefined selection of common constants and units or defining your own. You can even export your calculated formulas to OpenOffice Math formula editor to include them in your everyday documents (support for LaTeX export is planned).
+
+However please consider following rules:
+
+* equivocal expressions (e.g. unit m and variable m) can cause problems, so try to avoid them
+
+== Editor
+In the main text edit expressions are both written and calculated. Just enter your expression and press return (or enter on mobile platforms) and the result will be written in the next line. The line will be replaced if it starts with an equal sign. Not every result will be shown in the next line, some expressions like variable definitions have no output in the text edit. Inserting symbols and expressions is also possible with various docks, adding your own costomized dock is also possible and will be shown later.
+
+*Example:* approximate formula for pi
+----
+3*ln(640320)/sqrt(163) <Return>
+=3.141592653589793016
+----
+
+=== Comments
+PhyxCalc understands following comment types: +
+*//*    single line comment +
+/* */ multi line comment
+
+*Example:*
+----
+x=2 // a single line comment
+x++ /* a very long comment
+that would not fit in one line */
+----
+
+=== Keyboard shortcuts
+
+*Text Editor shortcuts:* +
+<Return>:		Calculate expression at current line +
+<Shift + Enter>:	Insert line break +
+<Ctrl + Enter>:		Calculate expression, cursor stays at line +
+<Ctrl + Z>:		Undo +
+<Ctrl + Shift + Z>:	Redo +
+<Ctrl + X>:		Cut +
+<Ctrl + C>:		Copy +
+<Ctrl + V>:		Paste +
+<Ctrl + A>:		Select All +
+
+*Application shortcuts:* +
+<F1>:			Show help +
+<Ctrl + N>:		New document +
+<Ctrl + O>:		Open document +
+<Ctrl + S>:		Save document +
+<Ctrl + Shift + S>:	Save all documents +
+<Ctrl + W>:		Close document +
+<Ctrl + Shift + W>:	Close all documents +
+<Ctrl + T>:		Open new tab +
+<Ctrl + R>:		Recalculate whole document +
+<Ctrl + Shift + R>:	Calculate from line +
+<Ctrl + E>:		Open export dialog +
+<Ctrl + Q>:		Quit application +
+
+=== Exporting formulas
+To export formulas use the export dialog. Once the dialog is opened, your expressions will be instantly converted. The converted output just insert in your OpenOffice Math.
+
+=== Editing startup definitions
+PhyxCalc loads a lot of predefined units and constants on startup. You can edit these definitions quite easy: just edit the file *definitions.txt* in your settings directory. You can easily open your settings directory in the menu.+
+*NOTE:* if you want to restore the default definitions, delete the defintions file and restart PhyxCalc
+
+=== Adding your own docks
+Adding your own customized docks to PhyxCalc is really simple. Just create a textfile with following outline in your setting directory:
+----
+tooltip; name in the dock; text to insert in the text editor
+----
+
+*Example:*
+----
+sine function;sin;sin()
+cosine function;cos;cos()
+tangens function;tan;tan()
+arcus sine function;asin;asin()
+arcus cosine function;acos;acos()
+----
+
+Then open the file docks.txt and add a line with the following outline:
+----
+docktitle;yourdockfilename.txt
+----
+
+*Example:*
+----
+Symbols;symbols.txt
+----
+
+Now restart PhyxCalc and start using your dock.
+
+== Mathematical Functions
+All mathematical functions can be written with the first letter uppercase or lowercase or only with uppercase letters. Trigonometric functions are using radiant, for degrees use dimensionless unit °.
+
+=== Operators and symbols
+PhyxCalc uses C++-like operators and some additional operators for special mathematical functionality. The operators are ordered beginning with highest priority.
+
+.PhyxCalc Operators
+[options="header"]
+|=======================
+|Predence |Operator |Description 
+|1        |++ \--       |Prefix/postfix increment and decrement
+|	  |()           |Braces and function calls
+|	  |{}           |Numeric value braces, removing the unit
+|2        |+ -          |Unary plus and minus
+|         |! ~          |Prefix: logical NOT and bitwise NOT
+|	  |!            |Postfix: fakulty
+|3        |^ ² ³        |Powers
+|4	  |* / mod      |Multiplication, division and remainder (modulo operator)
+|5        |+ -          |Addition and substraction
+|6        |<< >>        |Bitwise left shift and right shift
+|7	  |< \<= >= >   |Relational <, ≤, ≥ and >
+|8        |== !=        |Relational = and ≠
+|9	  |& bAND       |Bitwise AND
+|10       |^^ bXOR      |Bitwise XOR
+|11       |\| bOR       |Bitwise OR
+|12       |XAND         |Logical XAND
+|13       |&& AND NAND  |Logical AND and NAND
+|14       |XOR          |Logical XOR
+|15       |\|\| OR NOR  |Logical OR and NOR
+|16       |?: if then else IF(;;) |Conditional operators
+|17       |=            |Direct assignment
+|         |+= -=        |Assignment by sum and difference
+|         |*= /= %=     |Assignment by product, quotient and remainder
+|         |<\<= >>=      |Assignment by bitwise left shift and right shift
+|         |&= ^= \|=    |Assignment by bitwise AND, XOR and OR
+|18       |,            |Comma, sequential operator
+|=======================
+
+.Special Operators, see specific sections for more details
+[options="header"]
+|=======================
+|Operator |Description
+|\->      |Converting to something
+|=        |Defining and deleting variables
+|:=       |Defining and deleting constants
+|other    |Defining unit systems, units and prefixes, see units for more details
+|=======================
+ 
+=== Trigonometric and hyperbolic functions
+*sin*, *cos*, *tan*, *arcsin*, *arccos*, *arctan* +
+*cot*, *sec*, *csc*, *arccot*, *arcsec*, *arccsc* +
+*sinh*, *cosh*, *tanh*, *arcsinh*, *arccosh*, *arctanh* +
+*coth*, *sech*, *csch*, *arccoth*, *arcsech*, *arccsch*
+
+=== Logarithms, exponential function and roots
+*ln*, *log*<n>, *exp*, *sqrt*=*sqr*, *root*<n> +
+*Example:*
+----
+exp(3)
+=20.08553692318766774
+log2(1024)
+=10
+root12(25)
+=1.307660486011830591
+----
+
+=== Threshold functions
+*min*(a,b), *max*(a,b) +
+*abs* absolute value +
+*sign* signum function: -1, 0, 1 for x<0, x=0, x>0 +
+*heaviside* heaviside function: 0, 1 for x<0, x>=0 +
+
+=== Discretization functions
+*int* = *trunc*, *ceil*, *floor*, *round* +
+(truncate, round up, round down, round-to-nearest)
+
+=== Random functions
+*rnd* = *rand*: generates random number between 0 and 1 +
+*rndi* = *randi*: generates random number 0\<=rndi(i)<i +
+*rndg*(m, nd) = *randg*: generates Gaussian distributed number mean value m and normal distribution nd
+
+=== Complex functions
+*Re* returns real part of a complex number +
+*Im* returns imaginary part of a complex number +
+*arg* returns the argument of a complex number +
+*norm* returns the norm value of a complex number +
+*conj* returns the conjugate of a complex number +
+*polar*(rho, theta) returns a complex number corresponding to the complex number defined by its polar components, where rho is the magnitude and theta is the phase angle
+
+=== Other functions
+*ans* answer function, returns last result in memory -> similar to using # variable +
+*bcd* binary coded decimal function, converts a binary decimal coded number back to a dezimal value +
+*tobcd* inverse of the bcd function +
+*gcd*(x,y) greatest common divisor of x and y +
+*lcm*(x,y) least common multiple of x and y
+
+=== Defining custom functions
+Defing custom functions in PhyxCalc is pretty easy, just write the name of your function, then add the parameters and an expression.
+
+*Example:* calculating the current at a diode around the forward voltage
+----
+Is=10e-15A
+VT=25mV
+I(U)=Is*(exp(U/VT)-1)
+
+I(0.6V)
+=264.8912213µA
+I(0.7V)
+=14.46257064mA
+I(0.8V)
+=789.6296018mA
+----
+
+=== Precision
+PhyxCalc is using 64bit and 96bit floating point numbers, depending on your operating system. As every computing system not using arbitrary precision, PhyxCalc has accuracy problems. Depending on your expression, this can cause your result to be not as accurate as you wish. See Wikipedia for more information on floating point numbers and accuracy problems: http://en.wikipedia.org/wiki/Floating_point#Accuracy_problems
+
+== List-Addition
+To calculate a long list of numbers you can add a binary operator to the end of the first line. The result of this and the following lines will not be output, but instead calculated togheter. You can view the current result in the variable dock. An empty line outputs the result.
+
+The list mode can also be used to split an expression into multiple lines, but keep in mind that every line will be calculated as single term, maybe ignoring operator predence.
+
+*Example: addition*
+----
+12+ <Return>
+4 <Return>
+3 <Return>
+5 <Return>
+<Return>
+=24
+----
+
+*Example: multiplication*
+----
+2* <Return>
+2+3 <Return>
+<Return>
+=10  // 2*(2+3) and not 2*2+3
+----
+
+== Variables and Constants
+Variables could be used to save values in memory and as parameters for expressions. There is also a dock, where you can view all currently set variables.
+
+*Defining variables and constants:* +
+<variable name> = <expression> +
+<constant name> := <expression> +
+*NOTE:* only the result of the expression will be saved in the variable, to save the whole expression use functions
+
+*Deleting variables and constants:* +
+<variable name> = +
+<constant name> := +
+
+*Using variables and constants:* +
+<variable name> +
+<constant name>_ +
+
+*Example:*
+----
+x=2 //defining variable x
+c0:=299792458m/s //defining c0, speed of light in vacuum
+
+x*c0_
+=5.99585e+08m/s
+
+x= //deleting variable x
+c0:= //deleting constant c0
+----
+
+The *variable #* is a bit special. Everytime a value is output, the variable # is automatically set to this value, however, this variable can also be used like every other variable. +
+You can also use the *ans function* instead of the # variable.
+
+*Example:*
+----
+5+4
+=9
+#+sqr(#)  //# is like the ans (answer) button on some pocket calculators
+=12
+----
+
+== Number formats and systems
+You can insert numbers in decimal, hexadecimal, octal, binary or scientific format. You can also input complex numbers using the imaginary unit i or j. By default the ouput is automatically shown as integer, floating point number or in scientific format. Floating point numbers can also be input without leading zero. PhyxCalc uses 19-20 digits precision, depending on the platform you use, however, the ouput precision is set to 6 by default, you can alter this setting in the settings dialog.
+
+Using the \-> operator numbers can also be output in hexadecimal, octal or binary format. However, this is only implemented for positive integers.
+
+*Example:*
+----
+//different number formats
+(10 + 1.1) * 2E-10 / 4e2 + 0xFFAF - (0b10101001 + 0.12) * 0o345
+=26726.5
+
+//using complex numbers
+(2j+34)*(23.2+4.5i)
+=779.8+199.4i
+
+//differnt number conversions
+23->hex //converting decimal to hexadecimal
+=0x17
+10->bin //converting decimal to binary
+=0b00001010
+34->oct //converting decimal to octal
+=0o42
+0xF0->bin //converting hexadecimal to binary
+=0b11110000
+----
+
+== Units
+With PhyxCalc you have the ability to use units togheter with numbers. Derived units must be splitted with the multiplication sign *. Units can be output with base units or simplified to derived units. You  can also use prefixes, if the unit system, the unit is defined in, supports them. Units can be deleted by overwriting them with an empty expression.
+
+=== Unit Systems
+All units connected togheter should use the same unit system. Within one unit system, units will be converted into each other if possible. All units not contained in a unit system can not use prefixes. For example the SI unit system consists of 7 base units, all units that are part of the SI system can be expressed with the 7 base units. Also all SI units can use the SI prefixes.
+
+*Unit systems can be defined like this:* +
+[<name of the unit system>] +
+[<name of the unit system>]:= 
+
+*Examples:*
+----
+[si] //defines a unit system
+[si]:= //deletes the unit system
+----
+
+=== Base Units
+All unit systems use a set of base units. Also units defined without a unit system need base units. 
+
+*Base units can be defined like this:* +
+<name of the unit>=[] +
+<name of the unit>@<name of the unit system>=[] +
+<name of the unit>@<name of the unit system>@<prefered prefix>=[] 
+
+*Examples:*
+----
+feet=[] //defines the base unit feet
+m@si=[] //defines the base unit meter in the unit system si
+g@si@k=[] //defines the base unit gramm in the unit system si with the prefered prefix k (=kg)
+----
+
+=== Derived Units
+Derived units are units that consists of several base units, like for example C (= A*s).
+
+*Derived units can be defined like this:* +
+<name of the unit>=[<expression>] +
+<name of the unit>@<name of the unit system>=[<expression>] +
+<name of the unit>@<name of the unit system>@<prefered prefix>=[<expression>] 
+
+*Examples:*
+----
+ppm=[1E-6]  //parts per million
+J@si=[N*m]  //energy: Joule
+Wh@si@k=[1kW*h] //energy: kilowatts per hour 
+----
+
+=== Offset Units
+Some units also have a offset to a derived or base unit, like for example °C. However, offset units are by default not used for output.
+
+*Offset units can be defined like this:* +
+<name of the unit>=[<expression>]<offset> +
+<name of the unit>@<name of the unit system>=[<expression>]<offset> +
+<name of the unit>@<name of the unit system>@<prefered prefix>=[<expression>]<offset>
+
+*Examples:*
+----
+°C=[1K]-273.15      //temperature: degrees Celsius
+°F=[5/9*1K]-459.67*5/9 //temperature: degrees Fahrenheit
+----
+
+=== Unit Prefixes
+Units contained in unit systems can also use prefixes.
+
+*Prefixes can be defined like this:* +
+<name of the prefix>:<name of the unit system>=[<expression>] +
+<name of the prefix>:<name of the unit system>:i=[<expression>] +
+<name of the prefix>:=
+
+*Examples:*
+----
+//SI prefixes
+y:si=[1e-24]
+z:si=[1e-21]
+a:si=[1e-18]
+f:si=[1e-15]
+p:si=[1e-12]
+n:si=[1e-9]
+µ:si=[1e-6]
+m:si=[1e-3]
+c:si:i=[1e-2] //i is the input only flag, prefixes with this flag can only be use for input
+d:si:i=[1e-1]
+da:si:i=[1e1]
+h:si:i=[1e2]
+k:si=[1e3]
+M:si=[1e6]
+G:si=[1e9]
+T:si=[1e12]
+P:si=[1e15]
+E:si=[1e18]
+Z:si=[1e21]
+Y:si=[1e24]
+
+p:= //deletes the prefix p (pico)
+----
+
+== Conversion
+Expressions can be converted to defined units with the operator \->.
+
+Example: 
+----
+20m/s -> km/h
+=72km/h
+----
+
+== Quick Notation and Multiple Meanings
+Braces behind functions can be left out. Multiplication without multiplication sign is currently not implemented. However keep in mind, that multiple meanings could occur, when you for example define a unit with the same name a unit has.
+
+*Examples:*
+----
+sqr2
+=1.41421
+----
+
+== Datasets and Plotting
+PhyxCalc provides an easy way to create datasets and to plot them. Datasets are multi-dimensional
+sets of data (currently only 2 dimensions are supported), similar to tables. To plot a function
+you need to create a dataset, all things concerning plotting can then be done in the plot window.
+Depending on the function you use, a dataset with linear or logarithmic scale will be created. 
+Logarithmic scales are especially usable where you need to plot a big range of data, like for 
+example frequency analysis.
+
+These functions can be used to create datasets: +
+*Linear datasets:* +
+data([<expression>],<parameter>,<start value>,<stop value>) +
+data([<expression>],<parameter>,<start value>,<stop value>,<step size>) +
+The first function will calculate the size of the steps automatically. +
+*Logarithmic datasets:* +
+datalog([<expression>],<parameter>,<start value>,<stop value>) +
+datalog([<expression>],<parameter>,<start value>,<stop value>,<steps>) +
+The first function will use 1000 steps.
+
+
+*Examples:*
+----
+data([x^2],x,-5,5) //creates a linear dataset from -5 to 5 for the expression x^2
+data([exp(y)],y,0,5,0.01) //creates a linear dataset from 0 to 5 with step size 0.01 for the exp function
+datalog([H(j*2*pi*f)],f,1Hz,1MHz) //creates a logarithmic dataset from 1Hz to 1MHz
+----
+
+To plot datasets you need to open the plot window and then click on a dataset, then configure
+the plot until you are satisfied. You can select multiple datasets to plot them in one window. 
+To rename datasets double click on them.
+
+*NOTE:* To plot logarithmic datasets correctly use logarithmic axis scales.

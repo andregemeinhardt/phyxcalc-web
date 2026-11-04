@@ -1,0 +1,39 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file alias="application-exit">images/application-exit.png</file>
+        <file alias="code-context">images/code-context.png</file>
+        <file alias="configure">images/configure.png</file>
+        <file alias="document-export">images/document-export.png</file>
+        <file alias="document-new">images/document-new.png</file>
+        <file alias="document-open">images/document-open.png</file>
+        <file alias="document-save-all">images/document-save-all.png</file>
+        <file alias="document-save-as">images/document-save-as.png</file>
+        <file alias="document-save">images/document-save.png</file>
+        <file alias="edit-redo">images/edit-redo.png</file>
+        <file alias="edit-undo">images/edit-undo.png</file>
+        <file alias="tab-new">images/tab-new.png</file>
+        <file alias="edit-clear">images/edit-clear.png</file>
+        <file alias="edit-text-frame-update">images/edit-text-frame-update.png</file>
+        <file alias="edit-copy">images/edit-copy.png</file>
+        <file alias="edit-cut">images/edit-cut.png</file>
+        <file alias="edit-paste">images/edit-paste.png</file>
+        <file alias="documents-open-recent">images/document-open-recent.png</file>
+        <file alias="dialog-close">images/dialog-close.png</file>
+        <file alias="run-build-cursor">images/run-build-cursor.png</file>
+        <file alias="run-build">images/run-build.png</file>
+        <file alias="help-about">images/help-about.png</file>
+        <file alias="accessories-text-editor">images/accessories-text-editor.png</file>
+        <file alias="help-contents">images/help-contents.png</file>
+        <file alias="plot-icon">images/plot_icon.png</file>
+        <file alias="edit-delete">images/edit-delete.png</file>
+        <file alias="layer-visible-off">images/layer-visible-off.png</file>
+        <file alias="layer-visible-on">images/layer-visible-on.png</file>
+        <file alias="document-print">images/document-print.png</file>
+    </qresource>
+    <qresource prefix="/">
+        <file alias="splash">images/splash.png</file>
+    </qresource>
+    <qresource prefix="/appicon">
+        <file alias="icon">images/phyxcalc.png</file>
+    </qresource>
+</RCC>

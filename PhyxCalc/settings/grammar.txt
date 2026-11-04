@@ -1,0 +1,543 @@
+# Grammatik-Regeln (kontextfrei, epsilonfrei, sonst allgemein)
+# ------------------------------------------------------------
+# Regeln müssen bezüglich der Rückgabewerte gruppiert sein!
+# Nichtterminierte Symbole in Normklammern z.B. |A|
+# Terminierte Symbole außerhalb der Normklammern
+# Linksseitige Symbole ohne Klammern vor dem =
+#
+#
+# \~ = any character except =,:,@,...
+# \* = any character
+#
+# Definition needs following outline:
+#   Rule            |   functions
+#S=|p3|              ; outputVariable
+#S=|string|=|p3|     ; variableAdd
+S=|variable|=       ; variableRemove
+S=|string|:=|p3|    ; constantAdd
+S=|constant|:=      ; constantRemove
+S=[|string|]        ; unitGroupAdd
+S=[|unitGroup|]:=   ; unitGroupRemove
+S=|string|:|unitGroup|=[|p3|]   ; unitCheckDimensionless, prefixAdd
+S=|string|:|unitGroup|:i=[|p3|] ; unitCheckDimensionless, setInputOnlyFlag, prefixAdd
+S=|prefix|:=                    ; prefixRemove
+S=|string|=[]                           ; unitAdd                                                   //define base unit without unit system
+S=|string|@|unitGroup|=[]               ; unitAdd                                                   //define base unit with unit system
+S=|string|@|unitGroup|@|prefix|=[]      ; unitAdd                                                   //define base unit with unit system and prefered prefix
+S=|string|=[|p3|]                       ; unitAdd                                                   //define derived unit without unit system
+S=|string|@|unitGroup|=[|p3|]           ; unitAdd                                                   //define derived unit with unit system
+S=|string|@|unitGroup|@|prefix|=[|p3|]  ; unitAdd                                                   //define derived unit with unit system and prefered prefix
+S=|string|=[|p3|]|p3|                       ; unitAdd                                               //define offset unit without unit system
+S=|string|@|unitGroup|=[|p3|]|p3|           ; unitAdd                                               //define offset unit with unit system
+S=|string|@|unitGroup|@|prefix|=[|p3|]|p3|  ; unitAdd                                               //define offset unit with unit system and prefered prefix
+S=|string|(|parameters|)=|functionString|   ; bufferParameter, functionAdd                          //define function
+S=|custom_function|=                               ; bufferParameter, functionRemove                       //remove function
+S=|p3|->|convertTarget| ; unitCheckConvertible, unitConvert, unitClear, outputConvertedUnit
+convertTarget=|p3|  ; bufferParameter
+S=|p3|->hex         ; unitCheckDimensionless, valueCheckInteger, valueCheckPositive, bufferHexString, outputString
+S=|p3|->oct         ; unitCheckDimensionless, valueCheckInteger, valueCheckPositive, bufferOctString, outputString
+S=|p3|->bin         ; unitCheckDimensionless, valueCheckInteger, valueCheckPositive, bufferBinString, outputString
+S=|p1|              ; lowLevelRun
+S=|p3|+             ; listAddStart, listValueSave
+S=|p3|-             ; listSubStart, listValueSave
+S=|p3|*             ; listMulStart, listValueSave
+S=|p3|/             ; listDivStart, listValueSave
+S=|p3|^             ; listPowStart, listValueSave
+S=|p3||mod|         ; listModStart, listValueSave
+S=|p3||bAND|        ; listBAndStart, listValueSave
+S=|p3||bOR|         ; listBOrStart, listValueSave
+S=|p3||bXOR|        ; listBXorStart, listValueSave
+S=|p3||XAND|        ; listXandStart, listValueSave
+S=|p3||AND|         ; listAndStart, listValueSave
+S=|p3||NAND|        ; listNandStart, listValueSave
+S=|p3||XOR|         ; listXorStart, listValueSave
+S=|p3||OR|          ; listOrStart, listValueSave
+S=|p3||NOR|         ; listNorStart, listValueSave
+S=data([|functionString|],|string|,|p3|,|p3|,|p3|); valueCheckComplex3, datasetCreateStep
+S=data([|functionString|],|string|,|p3|,|p3|); valueCheckComplex2, datasetCreate
+S=datalog([|functionString|],|string|,|p3|,|p3|,|p3|); valueCheckComplex3, datasetLogCreateStep
+S=datalog([|functionString|],|string|,|p3|,|p3|); valueCheckComplex2, datasetLogCreate
+S=Data([|functionString|],|string|,|p3|,|p3|,|p3|); valueCheckComplex3, datasetCreateStep
+S=Data([|functionString|],|string|,|p3|,|p3|); valueCheckComplex2, datasetCreate
+S=Datalog([|functionString|],|string|,|p3|,|p3|,|p3|); valueCheckComplex3, datasetLogCreateStep
+S=Datalog([|functionString|],|string|,|p3|,|p3|); valueCheckComplex2, datasetLogCreate
+S=DATA([|functionString|],|string|,|p3|,|p3|,|p3|); valueCheckComplex3, datasetCreateStep
+S=DATA([|functionString|],|string|,|p3|,|p3|); valueCheckComplex2, datasetCreate
+S=DATALOG([|functionString|],|string|,|p3|,|p3|,|p3|); valueCheckComplex3, datasetLogCreateStep
+S=DATALOG([|functionString|],|string|,|p3|,|p3|); valueCheckComplex2, datasetLogCreate
+
+#Priority 1: sequential operator
+p1=|p1|,|p2|       ; lowLevelAdd
+p1=|p2|
+
+#Priority 2: assignement
+p2=|string|=|p3|    ; lowLevelAssignment
+p2=|variable|=      ; lowLevelAssignmentRemove
+p2=|variable|+=|p3| ; lowLevelCombinedAssignmentAdd
+p2=|variable|-=|p3| ; lowLevelCombinedAssignmentSub
+p2=|variable|*=|p3| ; lowLevelCombinedAssignmentMul
+p2=|variable|/=|p3| ; lowLevelCombinedAssignmentDiv
+p2=|variable|%=|p3| ; lowLevelCombinedAssignmentMod
+p2=|variable|&=|p3| ; lowLevelCombinedAssignmentAnd
+p2=|variable|\|=|p3| ; lowLevelCombinedAssignmentOr
+p2=|variable|^=|p3| ; lowLevelCombinedAssignmentXor
+p2=|variable|<<=|p3|; lowLevelCombinedAssignmentShiftLeft
+p2=|variable|>>=|p3|; lowLevelCombinedAssignmentShiftRight
+p2=|p3|             ; lowLevelOutput
+
+#Priority 3: conditional
+p3=|p4|?|p4|:|p4|                     ; unitCheckDimensionless3th, valueCheckInteger3th, conditionIfElse
+p3=if|p4|then|p4|else|p4|             ; unitCheckDimensionless3th, valueCheckInteger3th, conditionIfElse
+p3=IF(|p4|\;|p4|\;|p4|)               ; unitCheckDimensionless3th, valueCheckInteger3th, conditionIfElse
+p3=|p4|
+
+#Priority 4: logical OR and NOR
+p4=|p4||OR||p5|         ; unitCheckDimensionless2, valueCheckInteger2, logicOr
+p4=|p4||NOR||p5|          ; unitCheckDimensionless2, valueCheckInteger2, logicNor
+p4=|p5|
+OR=OR
+OR=\|\|
+NOR=NOR
+
+#Priortiy 5: logical XOR
+p5=|p5||XOR||p6|          ; unitCheckDimensionless2, valueCheckInteger2, logicXor
+p5=|p6|
+XOR=XOR
+
+#Priortiy 6:logical AND and NAND
+p6=|p6||AND||p7|        ; unitCheckDimensionless2, valueCheckInteger2, logicAnd
+p6=|p6||NAND||p7|         ; unitCheckDimensionless2, valueCheckInteger2, logicNand
+p6=|p7|
+AND=AND
+AND=&&
+NAND=NAND
+
+#Priortiy 7: logical XAND
+p7=|p7||XAND||p8|         ; unitCheckDimensionless2, valueCheckInteger2, logicXand
+p7=|p8|
+XAND=XAND
+
+#Priortiy 8: bitwise OR
+p8=|p8||bOR||p9|        ; unitCheckDimensionless2, valueCheckInteger2, bitOr
+p8=|p9|
+bOR=bOR
+bOR=\|
+
+#Priortiy 9: bitwise XOR
+p9=|p9||bXOR||p10|       ; unitCheckDimensionless2, valueCheckInteger2, bitXor
+p9=|p10|
+bXOR=bXOR
+bXOR=^^
+
+#Priority 10: bitwise AND
+p10=|p10||bAND||p11|      ; unitCheckDimensionless2, valueCheckInteger2, bitAnd
+p10=|p11|
+bAND=bAND
+bAND=&
+
+#Priority 11: equality
+p11=|p11|==|p12|        ; logicEqual
+p11=|p11|!=|p12|        ; logicNotEqual
+p11=|p12|
+
+#Priority 12: relational
+p12=|p12|<|p13|         ; valueCheckComplex2, unitCheckConvertible, logicSmaller
+p12=|p12|>|p13|         ; valueCheckComplex2, unitCheckConvertible, logicGreater
+p12=|p12|<=|p13|        ; valueCheckComplex2, unitCheckConvertible, logicSmallerOrEqual
+p12=|p12|>=|p13|        ; valueCheckComplex2, unitCheckConvertible, logicGreaterOrEqual
+p12=|p13|
+
+#Priority 13: shift
+p13=|p13|<<|p14|        ; unitCheckDimensionless2, valueCheckInteger2, bitShiftLeft
+p13=|p13|>>|p14|        ; unitCheckDimensionless2, valueCheckInteger2, bitShiftRight
+p13=|p14|
+
+#Priority 14: additive
+p14=|p14|+|p15|        ; unitCheckConvertible, valueAdd
+p14=|p14|-|p15|        ; unitCheckConvertible, valueSub
+p14=|p15|
+
+#Priority 15: multiplicative
+p15=|p15|*|p16|        ; unitMul, valueMul
+p15=|p15||pi|          ; unitMul, valueMul
+p15=|p15||euler|        ; unitMul, valueMul
+p15=|p15||variable|     ; unitMul, valueMul
+p15=|p15||constant|_    ; unitMul, valueMul
+p15=|p15||function|     ; unitMul, valueMul
+p15=|p15||custom_function|; unitMul, valueMul
+#p15=|p15|(|p3|)         ; unitMul, valueMul
+p15=|p15|/|p16|        ; unitDiv, valueDiv
+p15=|p15||mod||p16|    ; unitCheckDimensionless2, valueCheckInteger2, valueMod
+p15=|p16|
+mod=mod
+
+#Priority 16: powers
+#Not the optimal solution!
+p16=|p18|^|p17|       ; unitCheckDimensionless, unitPow, valuePow
+p16=|p16|^|p17|       ; unitCheckDimensionless, unitPow, valueNoPow
+p16=|p18|²            ; valuePush2, unitPow, valuePow
+p16=|p18|³            ; valuePush2, unitPow, valuePow
+p16=|p17|²            ; valuePush2, unitPow, valueNoPow
+p16=|p17|³            ; valuePush3, unitPow, valueNoPow
+p16=|p17|
+
+#Priority 17: unary (prefix) operations, numbers and units
+p17=|p3|!            ;  unitCheckDimensionless, valueCheckInteger, valueCheckPositive, valueFaculty
+p17=~|p3|            ; unitCheckDimensionless, valueCheckComplex, bitInv
+p17=!|p3|            ; unitCheckDimensionless, valueCheckComplex, logicNot
+p17=-|p18|           ; valueNeg
+p17=+|p18|
+p17=-|var|           ; pushVariable, valueNeg
+p17=+|var|           ; pushVariable
+p17=|var|            ; pushVariable
+p17=|p18|
+
+#Priority 18: functions, postfix, variables, constants, pi
+
+p18=(|p3|)
+p18=|pi|
+p18=|euler|
+p18=|variable|
+p18=--|variable|     ; variablePreDec
+p18=++|variable|     ; variablePreInc
+p18=|variable|--     ; variablePostDec
+p18=|variable|++     ; variablePostInc
+p18=|constant|_
+p18=|custom_function|
+p18=|function|
+pi=π                 ; valuePi
+pi=pi                ; valuePi
+euler=e              ; valueE
+
+#Functions
+funcParam=|var|      ; pushVariable
+funcParam=+|var|     ; pushVariable
+funcParam=-|var|     ; pushVariable, valueNeg
+funcParam=|p18|
+funcParam=+|p18|
+funcParam=-|p18|     ; valueNeg
+
+function={|p3|}                ; unitClear
+function=sin|funcParam|        ; unitCheckDimensionless, valueSin
+function=Sin|funcParam|        ; unitCheckDimensionless, valueSin
+function=SIN|funcParam|        ; unitCheckDimensionless, valueSin
+function=arcsin|funcParam|     ; unitCheckDimensionless, valueArcsin
+function=Arcsin|funcParam|     ; unitCheckDimensionless, valueArcsin
+function=ARCSIN|funcParam|     ; unitCheckDimensionless, valueArcsin
+function=asin|funcParam|       ; unitCheckDimensionless, valueArcsin
+function=Asin|funcParam|       ; unitCheckDimensionless, valueArcsin
+function=ASIN|funcParam|       ; unitCheckDimensionless, valueArcsin
+function=cos|funcParam|        ; unitCheckDimensionless, valueCos
+function=Cos|funcParam|        ; unitCheckDimensionless, valueCos
+function=COS|funcParam|        ; unitCheckDimensionless, valueCos
+function=arccos|funcParam|     ; unitCheckDimensionless, valueArccos
+function=Arccos|funcParam|     ; unitCheckDimensionless, valueArccos
+function=ARCCOS|funcParam|     ; unitCheckDimensionless, valueArccos
+function=acos|funcParam|       ; unitCheckDimensionless, valueArccos
+function=Acos|funcParam|       ; unitCheckDimensionless, valueArccos
+function=ACOS|funcParam|       ; unitCheckDimensionless, valueArccos
+function=tan|funcParam|        ; unitCheckDimensionless, valueTan
+function=Tan|funcParam|        ; unitCheckDimensionless, valueTan
+function=TAN|funcParam|        ; unitCheckDimensionless, valueTan
+function=arctan|funcParam|     ; unitCheckDimensionless, valueArctan
+function=Arctan|funcParam|     ; unitCheckDimensionless, valueArctan
+function=ARCTAN|funcParam|     ; unitCheckDimensionless, valueArctan
+function=atan|funcParam|       ; unitCheckDimensionless, valueArctan
+function=Atan|funcParam|       ; unitCheckDimensionless, valueArctan
+function=ATAN|funcParam|       ; unitCheckDimensionless, valueArctan
+function=cot|funcParam|        ; unitCheckDimensionless, valueCot
+function=Cot|funcParam|        ; unitCheckDimensionless, valueCot
+function=COT|funcParam|        ; unitCheckDimensionless, valueCot
+function=arccot|funcParam|     ; unitCheckDimensionless, valueArccot
+function=Arccot|funcParam|     ; unitCheckDimensionless, valueArccot
+function=ARCCOT|funcParam|     ; unitCheckDimensionless, valueArccot
+function=acot|funcParam|       ; unitCheckDimensionless, valueArccot
+function=Acot|funcParam|       ; unitCheckDimensionless, valueArccot
+function=ACOT|funcParam|       ; unitCheckDimensionless, valueArccot
+function=sec|funcParam|        ; unitCheckDimensionless, valueSec
+function=Sec|funcParam|        ; unitCheckDimensionless, valueSec
+function=SEC|funcParam|        ; unitCheckDimensionless, valueSec
+function=arcsec|funcParam|     ; unitCheckDimensionless, valueArcsec
+function=Arcsec|funcParam|     ; unitCheckDimensionless, valueArcsec
+function=ARCSEC|funcParam|     ; unitCheckDimensionless, valueArcsec
+function=asec|funcParam|       ; unitCheckDimensionless, valueArcsec
+function=Asec|funcParam|       ; unitCheckDimensionless, valueArcsec
+function=ASEC|funcParam|       ; unitCheckDimensionless, valueArcsec
+function=csc|funcParam|        ; unitCheckDimensionless, valueCsc
+function=Csc|funcParam|        ; unitCheckDimensionless, valueCsc
+function=CSC|funcParam|        ; unitCheckDimensionless, valueCsc
+function=arccsc|funcParam|     ; unitCheckDimensionless, valueArccsc
+function=Arccsc|funcParam|     ; unitCheckDimensionless, valueArccsc
+function=ARCCSC|funcParam|     ; unitCheckDimensionless, valueArccsc
+function=acsc|funcParam|       ; unitCheckDimensionless, valueArccsc
+function=Acsc|funcParam|       ; unitCheckDimensionless, valueArccsc
+function=ACSC|funcParam|       ; unitCheckDimensionless, valueArccsc
+function=sinh|funcParam|       ; unitCheckDimensionless, valueSinh
+function=Sinh|funcParam|       ; unitCheckDimensionless, valueSinh
+function=SINH|funcParam|       ; unitCheckDimensionless, valueSinh
+function=arcsinh|funcParam|    ; unitCheckDimensionless, valueArcsinh
+function=Arcsinh|funcParam|    ; unitCheckDimensionless, valueArcsinh
+function=ARCSINH|funcParam|    ; unitCheckDimensionless, valueArcsinh
+function=asinh|funcParam|      ; unitCheckDimensionless, valueArcsinh
+function=Asinh|funcParam|      ; unitCheckDimensionless, valueArcsinh
+function=ASINH|funcParam|      ; unitCheckDimensionless, valueArcsinh
+function=cosh|funcParam|       ; unitCheckDimensionless, valueCosh
+function=Cosh|funcParam|       ; unitCheckDimensionless, valueCosh
+function=COSH|funcParam|       ; unitCheckDimensionless, valueCosh
+function=arccosh|funcParam|    ; unitCheckDimensionless, valueArccosh
+function=Arccosh|funcParam|    ; unitCheckDimensionless, valueArccosh
+function=ARCCOSH|funcParam|    ; unitCheckDimensionless, valueArccosh
+function=acosh|funcParam|      ; unitCheckDimensionless, valueArccosh
+function=Acosh|funcParam|      ; unitCheckDimensionless, valueArccosh
+function=ACOSH|funcParam|      ; unitCheckDimensionless, valueArccosh
+function=tanh|funcParam|       ; unitCheckDimensionless, valueTanh
+function=Tanh|funcParam|       ; unitCheckDimensionless, valueTanh
+function=TANH|funcParam|       ; unitCheckDimensionless, valueTanh
+function=arctanh|funcParam|    ; unitCheckDimensionless, valueArctanh
+function=Arctanh|funcParam|    ; unitCheckDimensionless, valueArctanh
+function=ARCTANH|funcParam|    ; unitCheckDimensionless, valueArctanh
+function=atanh|funcParam|      ; unitCheckDimensionless, valueArctanh
+function=Atanh|funcParam|      ; unitCheckDimensionless, valueArctanh
+function=ATANH|funcParam|      ; unitCheckDimensionless, valueArctanh
+function=coth|funcParam|        ; unitCheckDimensionless, valueCoth
+function=Coth|funcParam|        ; unitCheckDimensionless, valueCoth
+function=COTH|funcParam|        ; unitCheckDimensionless, valueCoth
+function=arccoth|funcParam|     ; unitCheckDimensionless, valueArccoth
+function=Arccoth|funcParam|     ; unitCheckDimensionless, valueArccoth
+function=ARCCOTH|funcParam|     ; unitCheckDimensionless, valueArccoth
+function=acoth|funcParam|       ; unitCheckDimensionless, valueArccoth
+function=Acoth|funcParam|       ; unitCheckDimensionless, valueArccoth
+function=ACOTH|funcParam|       ; unitCheckDimensionless, valueArccoth
+function=sech|funcParam|        ; unitCheckDimensionless, valueSech
+function=Sech|funcParam|        ; unitCheckDimensionless, valueSech
+function=SECH|funcParam|        ; unitCheckDimensionless, valueSech
+function=arcsech|funcParam|     ; unitCheckDimensionless, valueArcsech
+function=Arcsech|funcParam|     ; unitCheckDimensionless, valueArcsech
+function=ARCSECH|funcParam|     ; unitCheckDimensionless, valueArcsech
+function=asech|funcParam|       ; unitCheckDimensionless, valueArcsech
+function=Asech|funcParam|       ; unitCheckDimensionless, valueArcsech
+function=ASECH|funcParam|       ; unitCheckDimensionless, valueArcsech
+function=csch|funcParam|        ; unitCheckDimensionless, valueCsch
+function=Csch|funcParam|        ; unitCheckDimensionless, valueCsch
+function=CSCH|funcParam|        ; unitCheckDimensionless, valueCsch
+function=arccsch|funcParam|     ; unitCheckDimensionless, valueArccsch
+function=Arccsch|funcParam|     ; unitCheckDimensionless, valueArccsch
+function=ARCCSCH|funcParam|     ; unitCheckDimensionless, valueArccsch
+function=acsch|funcParam|       ; unitCheckDimensionless, valueArccsch
+function=Acsch|funcParam|       ; unitCheckDimensionless, valueArccsch
+function=ACSCH|funcParam|       ; unitCheckDimensionless, valueArccsch
+function=exp|funcParam|        ; unitCheckDimensionless, valueExp
+function=Exp|funcParam|        ; unitCheckDimensionless, valueExp
+function=EXP|funcParam|        ; unitCheckDimensionless, valueExp
+function=ln|funcParam|         ; unitCheckDimensionless, valueLn
+function=Ln|funcParam|         ; unitCheckDimensionless, valueLn
+function=LN|funcParam|         ; unitCheckDimensionless, valueLn
+function=log|funcParam|(|p3|)  ; unitCheckDimensionless2, valueLogn
+function=Log|funcParam|(|p3|)  ; unitCheckDimensionless2, valueLogn
+function=LOG|funcParam|(|p3|)  ; unitCheckDimensionless2, valueLogn
+function=root|funcParam|(|p3|) ; unitRoot, valueRoot
+function=Root|funcParam|(|p3|) ; unitRoot, valueRoot
+function=ROOT|funcParam|(|p3|) ; unitRoot, valueRoot
+function=sqrt|funcParam|       ; unitSqrt, valueSqrt
+function=Sqrt|funcParam|       ; unitSqrt, valueSqrt
+function=SQRT|funcParam|       ; unitSqrt, valueSqrt
+function=sqr|funcParam|        ; unitSqrt, valueSqrt
+function=Sqr|funcParam|        ; unitSqrt, valueSqrt
+function=SQR|funcParam|        ; unitSqrt, valueSqrt
+function=abs|funcParam|        ; valueAbs
+function=Abs|funcParam|        ; valueAbs
+function=ABS|funcParam|        ; valueAbs
+function=max(|p3|,|p3|)   ; valueCheckComplex2, unitCheckConvertible, valueMax
+function=Max(|p3|,|p3|)   ; valueCheckComplex2, unitCheckConvertible, valueMax
+function=MAX(|p3|,|p3|)   ; valueCheckComplex2, unitCheckConvertible, valueMax
+function=min(|p3|,|p3|)   ; valueCheckComplex2, unitCheckConvertible, valueMin
+function=Min(|p3|,|p3|)   ; valueCheckComplex2, unitCheckConvertible, valueMin
+function=MIN(|p3|,|p3|)   ; valueCheckComplex2, unitCheckConvertible, valueMin
+function=avg(|p3|,|p3|)   ; valueCheckComplex2, unitCheckConvertible, valueAvg
+function=Avg(|p3|,|p3|)   ; valueCheckComplex2, unitCheckConvertible, valueAvg
+function=AVG(|p3|,|p3|)   ; valueCheckComplex2, unitCheckConvertible, valueAvg
+function=int|funcParam|        ; valueCheckComplex, valueInt
+function=Int|funcParam|        ; valueCheckComplex, valueInt
+function=INT|funcParam|        ; valueCheckComplex, valueInt
+function=trunc|funcParam|      ; valueCheckComplex, valueTrunc
+function=Trunc|funcParam|      ; valueCheckComplex, valueTrunc
+function=TRUNC|funcParam|      ; valueCheckComplex, valueTrunc
+function=floor|funcParam|      ; valueCheckComplex, valueFloor
+function=Floor|funcParam|      ; valueCheckComplex, valueFloor
+function=FLOOR|funcParam|      ; valueCheckComplex, valueFloor
+function=round|funcParam|      ; valueCheckComplex, valueRound
+function=Round|funcParam|      ; valueCheckComplex, valueRound
+function=ROUND|funcParam|      ; valueCheckComplex, valueRound
+function=ceil|funcParam|       ; valueCheckComplex, valueCeil
+function=Ceil|funcParam|       ; valueCheckComplex, valueCeil
+function=CEIL|funcParam|       ; valueCheckComplex, valueCeil
+function=sign|funcParam|       ; valueCheckComplex, valueSign
+function=Sign|funcParam|       ; valueCheckComplex, valueSign
+function=SIGN|funcParam|       ; valueCheckComplex, valueSign
+function=heaviside|funcParam|  ; valueCheckComplex, valueHeaviside
+function=Heaviside|funcParam|  ; valueCheckComplex, valueHeaviside
+function=HEAVISIDE|funcParam|  ; valueCheckComplex, valueHeaviside
+function=rand()          ; valueRand
+function=Rand()          ; valueRand
+function=RAND()          ; valueRand
+function=rand            ; valueRand
+function=Rand            ; valueRand
+function=RAND            ; valueRand
+function=rnd()           ; valueRand
+function=Rnd()           ; valueRand
+function=RND()           ; valueRand
+function=rnd             ; valueRand
+function=Rnd             ; valueRand
+function=RND             ; valueRand
+function=randi|funcParam|      ; unitCheckDimensionless, valueCheckInteger, valueCheckPositive, valueRandint
+function=Randi|funcParam|      ; unitCheckDimensionless, valueCheckInteger, valueCheckPositive, valueRandint
+function=RANDI|funcParam|      ; unitCheckDimensionless, valueCheckInteger, valueCheckPositive, valueRandint
+function=rndi|funcParam|       ; unitCheckDimensionless, valueCheckInteger, valueCheckPositive, valueRandint
+function=Rndi|funcParam|       ; unitCheckDimensionless, valueCheckInteger, valueCheckPositive, valueRandint
+function=RNDI|funcParam|       ; unitCheckDimensionless, valueCheckInteger, valueCheckPositive, valueRandint
+function=randg(|p3|,|p3|) ; valueCheckComplex2, unitCheckDimensionless2, valueRandg
+function=Randg(|p3|,|p3|) ; valueCheckComplex2, unitCheckDimensionless2, valueRandg
+function=RANDG(|p3|,|p3|) ; valueCheckComplex2, unitCheckDimensionless2, valueRandg
+function=rndg(|p3|,|p3|)  ; valueCheckComplex2, unitCheckDimensionless2, valueRandg
+function=Rndg(|p3|,|p3|)  ; valueCheckComplex2, unitCheckDimensionless2, valueRandg
+function=RNDG(|p3|,|p3|)  ; valueCheckComplex2, unitCheckDimensionless2, valueRandg
+function=re|funcParam|         ; complexReal
+function=Re|funcParam|         ; complexReal
+function=RE|funcParam|         ; complexReal
+function=im|funcParam|         ; complexImag
+function=Im|funcParam|         ; complexImag
+function=IM|funcParam|         ; complexImag
+function=arg|funcParam|        ; complexArg
+function=Arg|funcParam|        ; complexArg
+function=ARG|funcParam|        ; complexArg
+function=norm|funcParam|       ; complexNorm
+function=Norm|funcParam|       ; complexNorm
+function=NORM|funcParam|       ; complexNorm
+function=conj|funcParam|       ; complexConj
+function=Conj|funcParam|       ; complexConj
+function=CONJ|funcParam|       ; complexConj
+function=polar(|p3|,|p3|) ; valueCheckComplex2, unitCheckDimensionless2, complexPolar
+function=Polar(|p3|,|p3|) ; valueCheckComplex2, unitCheckDimensionless2, complexPolar
+function=POLAR(|p3|,|p3|) ; valueCheckComplex2, unitCheckDimensionless2, complexPolar
+function=bcd|funcParam|          ; unitCheckDimensionless, valueCheckInteger, valueCheckPositive, valueBcd
+function=Bcd|funcParam|          ; unitCheckDimensionless, valueCheckInteger, valueCheckPositive, valueBcd
+function=BCD|funcParam|          ; unitCheckDimensionless, valueCheckInteger, valueCheckPositive, valueBcd
+function=tobcd|funcParam|        ; unitCheckDimensionless, valueCheckInteger, valueCheckPositive, valueToBcd
+function=Tobcd|funcParam|        ; unitCheckDimensionless, valueCheckInteger, valueCheckPositive, valueToBcd
+function=TOBCD|funcParam|        ; unitCheckDimensionless, valueCheckInteger, valueCheckPositive, valueToBcd
+function=gcd(|p3|,|p3|) ; valueCheckComplex2, unitCheckDimensionless2, valueCheckInteger2, valueGcd
+function=Gcd(|p3|,|p3|) ; valueCheckComplex2, unitCheckDimensionless2, valueCheckInteger2, valueGcd
+function=GCD(|p3|,|p3|) ; valueCheckComplex2, unitCheckDimensionless2, valueCheckInteger2, valueGcd
+function=lcm(|p3|,|p3|) ; valueCheckComplex2, unitCheckDimensionless2, valueCheckInteger2, valueLcm
+function=Lcm(|p3|,|p3|) ; valueCheckComplex2, unitCheckDimensionless2, valueCheckInteger2, valueLcm
+function=LCM(|p3|,|p3|) ; valueCheckComplex2, unitCheckDimensionless2, valueCheckInteger2, valueLcm
+function=ans()            ; valueAns
+function=Ans()            ; valueAns
+function=ANS()            ; valueAns
+function=ans              ; valueAns
+function=Ans              ; valueAns
+function=ANS              ; valueAns
+
+#Numbers
+uint=|n|
+uint=|n||uint|
+uinte=|uint||e||uint|
+int=|uint|
+#int=|+-||uint|
+inte=|int||e||int|
+real=|int|
+real=|int|.|uint|
+real=.|uint|
+reale=|real|
+reale=|real||e||int|
+reale=|real||e||+-||int|
+hexpart=|nh|
+hexpart=|nh||hexpart|
+hex=0x|hexpart|
+octpart=|no|
+octpart=|no||octpart|
+oct=0o|octpart|
+binpart=|nb|
+binpart=|nb||binpart|
+bin=0b|binpart|
+complex=|reale|     ; bufferParameter, bufferValue
+complex=|i||reale|  ; bufferParameter, bufferValue
+complex=|reale||i|  ; bufferParameter, bufferValue
+complex=|i|         ; bufferParameter, bufferValue
+#var=|complex||unit|
+var=|complex|
+var=|complex||prefix||unit|
+var=|prefix||unit|
+var=|hex|       ; bufferParameter, bufferHex
+var=|bin|       ; bufferParameter, bufferBin
+var=|oct|       ; bufferParameter, bufferOct
+prefix=
+#unit=|prefix||unit|
++-=+
++-=-
+e=e
+e=E
+i=i
+i=j
+n=0
+n=1
+n=2
+n=3
+n=4
+n=5
+n=6
+n=7
+n=8
+n=9
+nh=0
+nh=1
+nh=2
+nh=3
+nh=4
+nh=5
+nh=6
+nh=7
+nh=8
+nh=9
+nh=A
+nh=B
+nh=C
+nh=D
+nh=E
+nh=F
+nh=a
+nh=b
+nh=c
+nh=d
+nh=e
+nh=f
+no=0
+no=1
+no=2
+no=3
+no=4
+no=5
+no=6
+no=7
+nb=0
+nb=1
+
+#Strings
+chars+=|any+|
+chars+=|any+||chars+|
+charsFunc=|anyFunc|
+charsFunc=|anyFunc||charsFunc|
+chars=|any|
+chars=|any||chars|
+string="|chars+|"     ; bufferParameter, bufferString
+string=|chars|       ; bufferParameter, bufferString
+any+=\*
+any=\~
+anyFunc=\+
+
+#Function parameters
+parameter=|string|  ; pushFunctionParameter
+parameters=|parameter|
+parameters=|parameter|,|parameters|
+parameters=
+functionString=|charsFunc|; bufferParameter, bufferExpression

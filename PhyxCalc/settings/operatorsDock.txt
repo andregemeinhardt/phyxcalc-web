@@ -1,0 +1,14 @@
+addition;+;+
+subtraction;-;-
+multiplication;*;*
+division;/;/
+raise x to the power of x;^;^
+logic AND;&&&;&&
+logic OR;||;||
+comparator equal;==;==
+comparator not equal;!=;!=
+comparator greater than;>;>
+comparator less than;<;<
+comparator greater or equal;>=;>=
+comparator less or equal;<=;<=
+if then else C++ style;?:;?:

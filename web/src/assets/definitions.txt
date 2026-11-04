@@ -1,0 +1,151 @@
+//this file contains definitions of units and constants to be loaded a the start of phyxcalc
+
+//define unit systems
+[si]
+
+//define prefixes
+y:si=[1e-24]
+z:si=[1e-21]
+a:si=[1e-18]
+f:si=[1e-15]
+p:si=[1e-12]
+n:si=[1e-9]
+µ:si=[1e-6]
+m:si=[1e-3]
+c:si:i=[1e-2]
+d:si:i=[1e-1]
+da:si:i=[1e1]
+h:si:i=[1e2]
+k:si=[1e3]
+M:si=[1e6]
+G:si=[1e9]
+T:si=[1e12]
+P:si=[1e15]
+E:si=[1e18]
+Z:si=[1e21]
+Y:si=[1e24]
+
+//mathematic and physical units
+°=[pi/180]  //Winkel: Grad
+'=[1°/60]   //Winkel: Bogenminute
+''=[1'/60]  //Winkel: Bogensekunde
+%=[0.01]    //Hundertstel: Prozent
+‰=[0.001]   //per mille
+‱=[0.0001]  //per ten thousand
+ppm=[1E-6]  //PartsPerMillion
+m@si=[]     // length, meter
+g@si@k=[]   // mass, kilogram
+s@si=[]     // time, second
+A@si=[]     // electric current, ampere
+K@si=[]     // thermodynamic temperature, kelvin
+cd@si=[]    // luminous intensity, candela
+mol@si=[]   // amount of substance, mole
+l@si=[1dm^3]        //Liter
+ha=[10000m^2]       //Fläche: Hektar
+ar=[100m^2]         //Fläche: Ar (offizille Abkürzung: a)
+min=[60s]           //Minute
+h=[60min]           //Stunde
+d=[24h]             //Tag
+yr=[365.2425d]      //Jahr
+N@si=[kg*m/s²]      //Kraft: Newton
+Pa@si=[N/m^2]       //Druck: Pascal
+J@si=[N*m]          //Energie: Joule
+W@si=[J/s]          //Leistung: Watt
+Wh@si@k=[1kW*h]         //Energie: Kilowattstunden
+C@si=[A*s]          //Ladung: Coulomb
+V@si=[J/C]          //elektrische Spannung: Volt
+Ω@si=[V/A]          //elektrischer Widerstand: Ohm
+S@si=[1/Ω]          //elektrischer Leitwert: Siemens
+F@si=[C/V]          //elektrische Kapazität: Farad
+H@si=[V*s/A]        //Induktivität: Henry
+T@si=[V*s/m^2]      //magnetische Flussdichte: Tesla
+Oe=[79.5775A/m]     //magnetische Feldstärke: Oersted
+Hz@si=[1/s]         //Frequenz: Hertz
+bar@si=[100kPa]     //Druck: Bar
+Torr=[133.3224Pa]   //Druck: Torr
+t=[1000kg]          //Masse: Tonne
+lb=[0.453592kg]     //Masse: Pound (Pfund)
+oz=[28.3495g]       //Masse: Ounce (Unze)
+u=[1.6605402E-27kg] //Masse: atomare Masseneinheit
+PS=[735.49875W]     //Leistung: Pferdestärke
+cal@si=[4.1868J]    //Energie: Kalorie
+gal=[3.785411784l]  //Volumen: gallon (US.liq.gal.)
+in=[2.54cm]         //Länge: Inch (Zoll)
+ft=[12in]           //Länge: foot (Fuß)
+yd=[3ft]            //Länge: yard
+mi=[1760yd]         //Länge: mile (Meile)
+sm=[1852m]          //Länge: Seemeile
+kn=[1sm/h]          //Geschwindigkeit: Knoten
+AU=[149597870691m]  //Länge: Astronomische Einheit
+pc=[206264.806AU]   //Länge: Parsec
+°C=[1K]-273.15      //Temperatur: Grad Celsius
+°F=[5/9*1K]-459.67*5/9 //Temperatur: Grad Fahrenheit
+sr=[]               //Raumwinkel: Steradiant (einheitenlos)
+cd@si=[]            //Lichststärke: Candela
+lm=[cd*sr]          //Lichtstrom: Lumen
+lx=[cd*sr/m^2]      //Beleuchtungsstärke: Lux
+dB=[]               //deziBel
+Ah=[1A*h]           //Ladung: Amperestunden
+
+//Währungseinheiten
+€=[]                    //Währung: Euro
+$=[0.782901433€]        //Währung: US-Dollar (Stand: Jänner 2012)
+£=[1.20378924€]         //Währung: Britisches Pfund (Stand: Jänner 2012)
+¥=[0.0102137321€]       //Währung: Japanischer Yen (Stand: Jänner 2012)
+YUAN=[0.124000626€]     //Währung: Chinesischer Yuan (Stand: Jänner 2012)
+SFr=[0.827064903€]      //Währung: Schweizer Franken (Stand: Jänner 2012)
+CHF=[1SFr]              //Währung: Schweizer Franken (Stand: Jänner 2012)
+
+//Informationseinheiten
+[data]
+k:data=[1e3]
+M:data=[1e6]
+G:data=[1e9]
+T:data=[1e12]
+P:data=[1e15]
+E:data=[1e18]
+Z:data=[1e21]
+Y:data=[1e24]
+Ki:data=[2^10]
+Mi:data=[2^20]
+Gi:data=[2^30]
+Ti:data=[2^40]
+Pi:data=[2^50]
+Ei:data=[2^60]
+Zi:data=[2^70]
+Yi:data=[2^80]
+
+bit@data=[]         //Datenmenge: Bit
+b@data=[1bit]
+Byte@data=[8bit]    //Datenmenge: Byte
+B@data=[1Byte]
+
+[data2]
+k:data2=[2^10]
+M:data2=[2^20]
+G:data2=[2^30]
+
+bps@data2=[1bit/s]        //Datenrate: Bit pro Sekunde
+
+//Physikalische Konstanten
+e:=1.60217733E-19C           //elektrische Elementarladung
+eps0:=8.854187817E-12F/m     //elektrische Feldkonstante
+µ0:=1.2566370614E-6H/m       //magnetische Feldkonstante
+c:=299792458m/s              //Lichtgeschwindigkeit
+c0:=c_                       //Lichtgeschwindigkeit
+h0:=6.6260755E-34J*s         //Planck-Konstante
+hbar:=h0_/(2*pi)             //Drehimpulsquantum
+G0:=2*e_^2/h0_               //Leitwertquantum
+NA:=6.0221367E23/mol         //Avogadro-Konstante
+G:=6.67259e-11N*m^2/kg^2     //Gravitationskonstante
+gn:=9.80665m/s^2             //Normalfallbeschleunigung
+kB:=1.380658E-23J/K          //Boltzmann-Konstante
+R:=8.314510J/mol*K           //molare Gaskonstante
+me:=9.1093897E-31kg          //Ruhemasse des Elektrons
+mn:=1.6749286E-27kg          //Ruhemasse des Neutrons
+mp:=1.6726231E-27kg          //Ruhemasse des Protons
+Z0:=376.7303135Ω             //Wellenwiderstand des Vakuums
+Rinf:=1.0973731534E7/m       //Rydberg-Konstante
+
+Lj=[1yr*c0_]                //Länge: Lichtjahr
+eV@si=[e_*1V]                //Engergieeinheit: Elektronvolt

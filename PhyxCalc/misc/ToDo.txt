@@ -1,0 +1,4 @@
+Fehlende Features:
+  -Konstanten und Buttons dafür
+
+Bugs:

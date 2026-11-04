@@ -1,0 +1,25 @@
+PhyxCalc Web
+Copyright (C) 2026 PhyxCalc Web Contributors
+Licensed under the GNU General Public License v3.0 or later (GPL-3.0-or-later).
+
+===============================================================================
+ATTRIBUTION & CREDITS
+===============================================================================
+
+This project is a modern web-native port and evolution of PhyxCalc, the classic
+desktop scientific and physical units calculator originally created and
+maintained by Alexander Rössler (machinekoder).
+
+- Original Project: PhyxCalc (Desktop C++/Qt)
+- Original Author: Alexander Rössler
+- Original Repository: https://github.com/machinekoder/PhyxCalc
+- Original Copyright: Copyright (C) 2011-2014 Alexander Rössler
+- Original License: GNU General Public License v3.0 or later (GPL-3.0-or-later)
+
+We express our gratitude to Alexander Rössler for the original concept, grammar
+design, and physical unit definitions that laid the groundwork for this
+application.
+
+All original code, grammar files, physical unit systems, default definitions, and
+documentation remain credited to Alexander Rössler and the original PhyxCalc
+contributors under the terms of the GNU General Public License v3.0.
