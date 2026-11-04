@@ -1,25 +1,25 @@
 /**
  * PhyxCalc Web Service Worker.
  * Caches core app shell, web worker, and assets for seamless offline operation.
- * Manages safe updates without discarding unsaved worksheet changes.
+ * Dynamically resolves URLs relative to scope to support GitHub Pages subpaths.
  */
 
 const CACHE_NAME = 'phyxcalc-v1.0.0';
 
-const PRECACHE_ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/icon.svg',
-];
-
 self.addEventListener('install', (event) => {
+  const scope = self.registration.scope;
+  const precacheUrls = [
+    new URL('./', scope).href,
+    new URL('./index.html', scope).href,
+    new URL('./manifest.json', scope).href,
+    new URL('./icon.svg', scope).href,
+  ];
+
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(PRECACHE_ASSETS);
+      return cache.addAll(precacheUrls);
     })
   );
-  // Do not unconditionally self.skipWaiting() here to avoid interrupting open tabs
 });
 
 self.addEventListener('activate', (event) => {
@@ -47,13 +47,15 @@ self.addEventListener('message', (event) => {
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
-  const url = new URL(event.request.url);
+  const scope = self.registration.scope;
+  const indexUrl = new URL('./index.html', scope).href;
+  const rootUrl = new URL('./', scope).href;
 
   // HTML navigation requests: Network first with cached index.html offline fallback
   if (event.request.mode === 'navigate') {
     event.respondWith(
       fetch(event.request).catch(() => {
-        return caches.match('/index.html') || caches.match('/');
+        return caches.match(indexUrl) || caches.match(rootUrl);
       })
     );
     return;
@@ -68,7 +70,7 @@ self.addEventListener('fetch', (event) => {
         if (
           response &&
           response.status === 200 &&
-          (response.type === 'basic' || url.origin === self.location.origin)
+          (response.type === 'basic' || response.type === 'cors')
         ) {
           const responseClone = response.clone();
           caches.open(CACHE_NAME).then((cache) => {
@@ -78,7 +80,7 @@ self.addEventListener('fetch', (event) => {
         return response;
       }).catch(() => {
         // Fallback for missing offline image or asset
-        return caches.match('/icon.svg');
+        return caches.match(new URL('./icon.svg', scope).href);
       });
     })
   );
