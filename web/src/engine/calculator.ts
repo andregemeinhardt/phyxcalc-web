@@ -6,7 +6,7 @@
  */
 
 import { Complex } from './complex';
-import { CompoundUnit } from './units';
+import { CompoundUnit, BASE_DIMENSION_SYMBOLS, DimensionVector, STANDARD_PREFIXES } from './units';
 import {
   DEFAULT_ENGINE_SETTINGS,
   DatasetInfo,
@@ -629,12 +629,22 @@ export class PhyxCalculator {
     const convertedImag = (value.imag * sourceUnit.scale) / targetUnit.scale;
     const convertedVal = new Complex(convertedReal, convertedImag);
 
-    const displayNum = this.formatNumber(convertedVal.real);
+    let displayVal = '';
+    if (Math.abs(convertedVal.imag) > 1e-12) {
+      if (Math.abs(convertedVal.real) < 1e-12) {
+        displayVal = `${this.formatNumber(convertedVal.imag)}${this.settings.imaginaryUnit ?? 'j'}`;
+      } else {
+        const sign = convertedVal.imag > 0 ? '+' : '';
+        displayVal = `(${this.formatNumber(convertedVal.real)}${sign}${this.formatNumber(convertedVal.imag)}${this.settings.imaginaryUnit ?? 'j'})`;
+      }
+    } else {
+      displayVal = this.formatNumber(convertedVal.real);
+    }
     return {
       kind: 'display',
       value: convertedVal,
       unit: targetUnit,
-      display: `${displayNum}${targetStr}`,
+      display: `${displayVal}${targetStr}`,
     };
   }
 
@@ -707,29 +717,7 @@ export class PhyxCalculator {
       };
     }
 
-    // Unit addition: 1m+100cm -> 2m
-    if (s.match(/1m\s*\+\s*100cm/)) {
-      return {
-        value: Complex.fromReal(2),
-        unit: new CompoundUnit(new Map([['m', 1]]), [1, 0, 0, 0, 0, 0, 0], 1.0),
-      };
-    }
-
-    // Unit power / root probes:
-    if (s === '(2m)*(3m)') {
-      return {
-        value: Complex.fromReal(6),
-        unit: new CompoundUnit(new Map([['m', 2]]), [2, 0, 0, 0, 0, 0, 0], 1.0),
-      };
-    }
-    if (s === 'sqrt(4m^2)') {
-      return {
-        value: Complex.fromReal(2),
-        unit: new CompoundUnit(new Map([['m', 1]]), [1, 0, 0, 0, 0, 0, 0], 1.0),
-      };
-    }
-
-    return this.parseFullExpression(s);
+    return this.parseFullExpression(s, rawInput);
   }
 
   private checkConditional(s: string): { value: Complex; unit: CompoundUnit; error?: any } | undefined {
@@ -798,7 +786,7 @@ export class PhyxCalculator {
     };
   }
 
-  private parseFullExpression(expr: string): { value: Complex; unit: CompoundUnit; error?: any } {
+  private parseFullExpression(expr: string, rawInput: string = expr): { value: Complex; unit: CompoundUnit; error?: any } {
     let s = expr;
 
     // Last answer token # and ans()
@@ -970,18 +958,39 @@ export class PhyxCalculator {
 
     const parseAddSub = (): { value: Complex; unit: CompoundUnit } => {
       skipWs();
+      const startLeft = pos;
       let left = parseMulDiv();
       while (pos < s.length) {
         skipWs();
         const ch = peek();
-        if (ch === '+') {
+        if (ch === '+' || ch === '-') {
           consume();
           const right = parseMulDiv();
-          left = { value: left.value.add(right.value), unit: left.unit };
-        } else if (ch === '-') {
-          consume();
-          const right = parseMulDiv();
-          left = { value: left.value.sub(right.value), unit: left.unit };
+          const endRight = pos;
+
+          if (left.unit.isDimensionless() && right.unit.isDimensionless()) {
+            left = {
+              value: ch === '+' ? left.value.add(right.value) : left.value.sub(right.value),
+              unit: CompoundUnit.dimensionless(),
+            };
+          } else if (left.unit.isConvertibleTo(right.unit)) {
+            const ratio = right.unit.scale / left.unit.scale;
+            const rightScaled = right.value.mul(Complex.fromReal(ratio));
+            left = {
+              value: ch === '+' ? left.value.add(rightScaled) : left.value.sub(rightScaled),
+              unit: left.unit,
+            };
+          } else {
+            const leadingOffset = rawInput.indexOf(s);
+            const offset = leadingOffset >= 0 ? leadingOffset : 0;
+            const startPos = offset + startLeft;
+            const endPos = offset + endRight;
+            const err: any = new Error(`error at position ${startPos}-${endPos}: Units not convertible`);
+            err.code = 'UnitsNotConvertibleError';
+            err.start = startPos;
+            err.end = endPos;
+            throw err;
+          }
         } else {
           break;
         }
@@ -997,11 +1006,11 @@ export class PhyxCalculator {
         if (peek() === '*') {
           consume();
           const right = parsePower();
-          left = { value: left.value.mul(right.value), unit: left.unit.multiply(right.unit) };
+          left = this.multiplyValues(left, right);
         } else if (peek() === '/') {
           consume();
           const right = parsePower();
-          left = { value: left.value.div(right.value), unit: left.unit.divide(right.unit) };
+          left = this.divideValues(left, right);
         } else if (s.slice(pos).match(/^mod(?![a-zA-Z_])/i)) {
           pos += 3;
           const right = parsePower();
@@ -1159,8 +1168,10 @@ export class PhyxCalculator {
           return { value: Complex.fromReal(numVal * Math.PI), unit };
         }
 
-        // Attached unit (e.g. 1000m, 20m/s, 2kwidgetunit)
-        const unitMatch = rest.match(/^([a-zA-Zµ°%'"]+)/);
+        // Attached unit (e.g. 1000m, 20m/s, 2kwidgetunit, 4m^2)
+        const unitMatch = rest.match(
+          /^([a-zA-Zµμ°%'"][a-zA-Z0-9_µμ°%'"]*(?:\^[+-]?[0-9]+|[²³⁴⁵⁶⁷⁸⁹])*(?:[/][a-zA-Zµμ°%'"][a-zA-Z0-9_µμ°%'"]*(?:\^[+-]?[0-9]+|[²³⁴⁵⁶⁷⁸⁹])*)*)/
+        );
         if (unitMatch) {
           const uStr = unitMatch[1];
           const parsedU = this.parseUnitString(uStr);
@@ -1180,7 +1191,7 @@ export class PhyxCalculator {
       }
 
       // Identifiers: variables, constants (e.g. c0_, pi)
-      const idMatch = s.slice(pos).match(/^([a-zA-Z_µπ°][a-zA-Z0-9_µπ°]*)/);
+      const idMatch = s.slice(pos).match(/^([a-zA-Z_µμπ°][a-zA-Z0-9_µμπ°]*)/);
       if (idMatch) {
         const id = idMatch[1];
         pos += id.length;
@@ -1380,41 +1391,284 @@ export class PhyxCalculator {
     return x;
   }
 
-  private parseUnitString(uStr: string): CompoundUnit | null {
-    // 1. Direct match in units table
-    const direct = this.units.get(uStr);
-    if (direct) {
-      return new CompoundUnit(new Map([[uStr, 1]]), direct.dimension, direct.scale, direct.offset);
+  private getUnitDimension(sym: string): DimensionVector | null {
+    if (this.units.has(sym)) {
+      return this.units.get(sym)!.dimension;
+    }
+    for (const [prefSym] of this.prefixes) {
+      if (sym.startsWith(prefSym)) {
+        const base = this.units.get(sym.slice(prefSym.length));
+        if (base) return base.dimension;
+      }
+    }
+    for (const [prefSym] of Object.entries(STANDARD_PREFIXES)) {
+      if (sym.startsWith(prefSym)) {
+        const base = this.units.get(sym.slice(prefSym.length));
+        if (base) return base.dimension;
+      }
+    }
+    return null;
+  }
+
+  private dimensionsEqual(d1: DimensionVector, d2: DimensionVector): boolean {
+    return d1.every((v, i) => Math.abs(v - d2[i]) < 1e-9);
+  }
+
+  private createBaseDimensionUnit(dim: DimensionVector): CompoundUnit {
+    const unitsMap = new Map<string, number>();
+    for (let i = 0; i < BASE_DIMENSION_SYMBOLS.length; i++) {
+      const exp = dim[i];
+      if (Math.abs(exp) > 1e-9) {
+        unitsMap.set(BASE_DIMENSION_SYMBOLS[i], exp);
+      }
+    }
+    return new CompoundUnit(unitsMap, dim, 1.0, 0);
+  }
+
+  private multiplyValues(
+    left: { value: Complex; unit: CompoundUnit },
+    right: { value: Complex; unit: CompoundUnit }
+  ): { value: Complex; unit: CompoundUnit } {
+    if (left.unit.isDimensionless()) {
+      return { value: left.value.mul(right.value), unit: right.unit };
+    }
+    if (right.unit.isDimensionless()) {
+      return { value: left.value.mul(right.value), unit: left.unit };
     }
 
-    // 2. Prefix + Unit decomposition (e.g. "km" -> "k" + "m", "2kwidgetunit" -> "k" + "widgetunit")
+    let equalize = false;
+    for (const [leftSym] of left.unit.units) {
+      const leftDim = this.getUnitDimension(leftSym);
+      for (const [rightSym] of right.unit.units) {
+        if (leftSym !== rightSym) {
+          const rightDim = this.getUnitDimension(rightSym);
+          if (leftDim && rightDim && this.dimensionsEqual(leftDim, rightDim)) {
+            equalize = true;
+            break;
+          }
+        }
+      }
+      if (equalize) break;
+    }
+
+    if (equalize) {
+      const leftRealInBase = left.value.real * left.unit.scale;
+      const leftImagInBase = left.value.imag * left.unit.scale;
+      const rightRealInBase = right.value.real * right.unit.scale;
+      const rightImagInBase = right.value.imag * right.unit.scale;
+      const leftVal = new Complex(leftRealInBase, leftImagInBase);
+      const rightVal = new Complex(rightRealInBase, rightImagInBase);
+
+      const baseUnit = this.createBaseDimensionUnit(
+        left.unit.dimension.map((d, i) => d + right.unit.dimension[i]) as DimensionVector
+      );
+      return {
+        value: leftVal.mul(rightVal),
+        unit: baseUnit,
+      };
+    }
+
+    return {
+      value: left.value.mul(right.value),
+      unit: left.unit.multiply(right.unit),
+    };
+  }
+
+  private divideValues(
+    left: { value: Complex; unit: CompoundUnit },
+    right: { value: Complex; unit: CompoundUnit }
+  ): { value: Complex; unit: CompoundUnit } {
+    if (right.unit.isDimensionless()) {
+      return { value: left.value.div(right.value), unit: left.unit };
+    }
+
+    if (left.unit.isConvertibleTo(right.unit)) {
+      const leftRealInBase = left.value.real * left.unit.scale;
+      const leftImagInBase = left.value.imag * left.unit.scale;
+      const rightRealInBase = right.value.real * right.unit.scale;
+      const rightImagInBase = right.value.imag * right.unit.scale;
+      const leftVal = new Complex(leftRealInBase, leftImagInBase);
+      const rightVal = new Complex(rightRealInBase, rightImagInBase);
+      return {
+        value: leftVal.div(rightVal),
+        unit: CompoundUnit.dimensionless(),
+      };
+    }
+
+    let equalize = false;
+    for (const [leftSym] of left.unit.units) {
+      const leftDim = this.getUnitDimension(leftSym);
+      for (const [rightSym] of right.unit.units) {
+        if (leftSym !== rightSym) {
+          const rightDim = this.getUnitDimension(rightSym);
+          if (leftDim && rightDim && this.dimensionsEqual(leftDim, rightDim)) {
+            equalize = true;
+            break;
+          }
+        }
+      }
+      if (equalize) break;
+    }
+
+    if (equalize) {
+      const leftRealInBase = left.value.real * left.unit.scale;
+      const leftImagInBase = left.value.imag * left.unit.scale;
+      const rightRealInBase = right.value.real * right.unit.scale;
+      const rightImagInBase = right.value.imag * right.unit.scale;
+      const leftVal = new Complex(leftRealInBase, leftImagInBase);
+      const rightVal = new Complex(rightRealInBase, rightImagInBase);
+
+      const baseUnit = this.createBaseDimensionUnit(
+        left.unit.dimension.map((d, i) => d - right.unit.dimension[i]) as DimensionVector
+      );
+      return {
+        value: leftVal.div(rightVal),
+        unit: baseUnit,
+      };
+    }
+
+    return {
+      value: left.value.div(right.value),
+      unit: left.unit.divide(right.unit),
+    };
+  }
+
+  private parseUnitAtomic(sym: string): CompoundUnit | null {
+    if (!sym) return null;
+    if (sym === '1') return CompoundUnit.dimensionless();
+
+    const direct = this.units.get(sym);
+    if (direct) {
+      return new CompoundUnit(new Map([[sym, 1]]), direct.dimension, direct.scale, direct.offset);
+    }
+
     for (const [prefSym, prefDef] of this.prefixes) {
-      if (uStr.startsWith(prefSym)) {
-        const baseSym = uStr.slice(prefSym.length);
+      if (sym.startsWith(prefSym)) {
+        const baseSym = sym.slice(prefSym.length);
         const baseU = this.units.get(baseSym);
         if (baseU) {
           const totalScale = prefDef.factor * baseU.scale;
-          return new CompoundUnit(new Map([[uStr, 1]]), baseU.dimension, totalScale, baseU.offset);
+          return new CompoundUnit(new Map([[sym, 1]]), baseU.dimension, totalScale, baseU.offset);
         }
       }
     }
 
-    // 3. Information units: KiB, MiB
-    if (uStr === 'KiB') {
-      return new CompoundUnit(new Map([['B', 1]]), [0, 0, 0, 0, 0, 0, 0], 1024);
-    }
-
-    // 4. Compound unit division: e.g. "km/h"
-    if (uStr.includes('/')) {
-      const [num, den] = uStr.split('/');
-      const numU = this.parseUnitString(num);
-      const denU = this.parseUnitString(den);
-      if (numU && denU) {
-        return numU.divide(denU);
+    for (const [prefSym, factor] of Object.entries(STANDARD_PREFIXES)) {
+      if (sym.startsWith(prefSym)) {
+        const baseSym = sym.slice(prefSym.length);
+        const baseU = this.units.get(baseSym);
+        if (baseU) {
+          const totalScale = factor * baseU.scale;
+          return new CompoundUnit(new Map([[sym, 1]]), baseU.dimension, totalScale, baseU.offset);
+        }
       }
     }
 
     return null;
+  }
+
+  private parseUnitString(raw: string): CompoundUnit | null {
+    if (!raw) return null;
+    let s = raw.trim();
+    if (!s) return null;
+
+    s = s
+      .replace(/⁰/g, '^0')
+      .replace(/¹/g, '^1')
+      .replace(/²/g, '^2')
+      .replace(/³/g, '^3')
+      .replace(/⁴/g, '^4')
+      .replace(/⁵/g, '^5')
+      .replace(/⁶/g, '^6')
+      .replace(/⁷/g, '^7')
+      .replace(/⁸/g, '^8')
+      .replace(/⁹/g, '^9')
+      .replace(/⁻/g, '^-')
+      .replace(/·/g, '*');
+
+    let pos = 0;
+    const skipWs = () => {
+      while (pos < s.length && /\s/.test(s[pos])) pos++;
+    };
+
+    const parseExpr = (): CompoundUnit | null => {
+      let left = parseTerm();
+      if (!left) return null;
+
+      skipWs();
+      while (pos < s.length) {
+        const ch = s[pos];
+        if (ch === '*' || ch === '/') {
+          pos++;
+          skipWs();
+          const right = parseTerm();
+          if (!right) return null;
+          left = ch === '*' ? left.multiply(right) : left.divide(right);
+          skipWs();
+        } else if (ch === '(' || /[a-zA-Z0-9_µμ°%'"]/.test(ch)) {
+          const right = parseTerm();
+          if (!right) return null;
+          left = left.multiply(right);
+          skipWs();
+        } else {
+          break;
+        }
+      }
+      return left;
+    };
+
+    const parseTerm = (): CompoundUnit | null => {
+      skipWs();
+      let factor = parseFactor();
+      if (!factor) return null;
+
+      skipWs();
+      if (pos < s.length && s[pos] === '^') {
+        pos++;
+        skipWs();
+        const expMatch = s.slice(pos).match(/^-?[0-9]+/);
+        if (!expMatch) return null;
+        pos += expMatch[0].length;
+        const exp = parseInt(expMatch[0], 10);
+        factor = factor.pow(exp);
+      }
+      return factor;
+    };
+
+    const parseFactor = (): CompoundUnit | null => {
+      skipWs();
+      if (pos >= s.length) return null;
+
+      if (s[pos] === '(') {
+        pos++;
+        skipWs();
+        const inner = parseExpr();
+        if (!inner) return null;
+        skipWs();
+        if (pos < s.length && s[pos] === ')') pos++;
+        return inner;
+      }
+
+      if (s[pos] === '1' && (pos + 1 >= s.length || s[pos + 1] === '/' || s[pos + 1] === '*' || /\s/.test(s[pos + 1]))) {
+        pos++;
+        return CompoundUnit.dimensionless();
+      }
+
+      const idMatch = s.slice(pos).match(/^([a-zA-Z0-9_µμ°%'"]+)/);
+      if (!idMatch) return null;
+      pos += idMatch[0].length;
+      return this.parseUnitAtomic(idMatch[0]);
+    };
+
+    try {
+      const res = parseExpr();
+      if (res && pos >= s.length) {
+        return res;
+      }
+      return null;
+    } catch {
+      return null;
+    }
   }
 
   private formatNumber(n: number): string {

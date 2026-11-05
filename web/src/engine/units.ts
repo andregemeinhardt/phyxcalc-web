@@ -35,6 +35,7 @@ export const STANDARD_PREFIXES: Record<string, number> = {
   m: 1e-3,
   u: 1e-6,
   'μ': 1e-6,
+  'µ': 1e-6,
   n: 1e-9,
   p: 1e-12,
   f: 1e-15,

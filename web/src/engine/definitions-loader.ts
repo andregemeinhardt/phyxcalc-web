@@ -140,7 +140,7 @@ export function loadStartupDefinitions(
     }
 
     // Prefix: name:system=[val] or name:system:i=[val]
-    const prefMatch = line.match(/^([a-zA-Zµ_]+):([a-zA-Z0-9_]+)(:i)?=\[([^\]]+)\]$/);
+    const prefMatch = line.match(/^([a-zA-Zµμ_]+):([a-zA-Z0-9_]+)(:i)?=\[([^\]]+)\]$/);
     if (prefMatch) {
       const sym = prefMatch[1];
       const sys = prefMatch[2];
@@ -157,11 +157,15 @@ export function loadStartupDefinitions(
         prefixes.set(sym, prefObj);
       }
       prefixes.set(`${sym}:${sys}`, prefObj);
+      if (sym === 'µ') {
+        prefixes.set('μ', { symbol: 'μ', system: sys, factor, inputOnly });
+        prefixes.set('u', { symbol: 'u', system: sys, factor, inputOnly: true });
+      }
       continue;
     }
 
     // Constants: name:=expr
-    const constMatch = line.match(/^([a-zA-Z0-9_µ]+):=(.+)$/);
+    const constMatch = line.match(/^([a-zA-Z0-9_µμ]+):=(.+)$/);
     if (constMatch) {
       const name = constMatch[1];
       const expr = constMatch[2].trim();
@@ -178,7 +182,7 @@ export function loadStartupDefinitions(
       } else if (name === 'eps0') {
         cVal = 8.854187817e-12;
         cUnit = new CompoundUnit(new Map([['F', 1], ['m', -1]]), [-3, -1, 4, 2, 0, 0, 0], 1.0);
-      } else if (name === 'µ0') {
+      } else if (name === 'µ0' || name === 'μ0') {
         cVal = 1.2566370614e-6;
         cUnit = new CompoundUnit(new Map([['H', 1], ['m', -1]]), [1, 1, -2, -2, 0, 0, 0], 1.0);
       } else if (name === 'h0') {
@@ -236,7 +240,7 @@ export function loadStartupDefinitions(
     }
 
     // Base unit: sym@sys=[] or sym@sys@pref=[]
-    const baseMatch = line.match(/^([a-zA-Z0-9_µ°%'"]+)@([a-zA-Z0-9_]+)(?:@([a-zA-Z0-9_]+))?=\[\]$/);
+    const baseMatch = line.match(/^([a-zA-Z0-9_µμ°%'"]+)@([a-zA-Z0-9_]+)(?:@([a-zA-Z0-9_]+))?=\[\]$/);
     if (baseMatch) {
       const sym = baseMatch[1];
       const sys = baseMatch[2];
@@ -256,7 +260,7 @@ export function loadStartupDefinitions(
     }
 
     // Derived unit with offset: sym=[scale]offset or sym@sys=[scale]offset
-    const offsetMatch = line.match(/^([a-zA-Z0-9_µ°%'"]+)(?:@([a-zA-Z0-9_]+))?=\[([^\]]+)\](.+)$/);
+    const offsetMatch = line.match(/^([a-zA-Z0-9_µμ°%'"]+)(?:@([a-zA-Z0-9_]+))?=\[([^\]]+)\](.+)$/);
     if (offsetMatch) {
       const sym = offsetMatch[1];
       const sys = offsetMatch[2] || currentSystem;
@@ -290,7 +294,7 @@ export function loadStartupDefinitions(
     }
 
     // Derived unit: sym=[def] or sym@sys=[def] or sym@sys@pref=[def]
-    const derivedMatch = line.match(/^([a-zA-Z0-9_µ°%'"]+)(?:@([a-zA-Z0-9_]+))?(?:@([a-zA-Z0-9_]+))?=\[([^\]]*)\]$/);
+    const derivedMatch = line.match(/^([a-zA-Z0-9_µμ°%'"]+)(?:@([a-zA-Z0-9_]+))?(?:@([a-zA-Z0-9_]+))?=\[([^\]]*)\]$/);
     if (derivedMatch) {
       const sym = derivedMatch[1];
       const sys = derivedMatch[2] || currentSystem;

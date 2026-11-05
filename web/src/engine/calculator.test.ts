@@ -93,4 +93,56 @@ describe('PhyxCalc TypeScript Engine Proof of Concept', () => {
     expect(ds).toBeDefined();
     expect(ds?.count).toBe(51);
   });
+
+  it('correctly simplifies and converts dimensional units across prefixes', () => {
+    calc.reset();
+    // Dimensionless reduction across different prefixes of the same unit
+    const divRes = calc.evaluate('10m / 2mm');
+    expect(divRes.kind).toBe('value');
+    expect(divRes.value?.real).toBe(5000);
+    expect(divRes.display).toBe('5000');
+    expect(divRes.unit?.isDimensionless()).toBe(true);
+
+    // Multi-line user volume scenario: r = 3.1mm, d = 12µm, V = pi*r^2*d
+    expect(calc.evaluate('r = 3.1mm').kind).toBe('silent');
+    expect(calc.evaluate('d = 12µm').kind).toBe('silent');
+    const v = calc.evaluate('V = pi*r^2*d');
+    expect(v.kind).toBe('silent');
+    const vVar = calc.inspectVariables().find((x) => x.name === 'V');
+    expect(vVar).toBeDefined();
+    expect(vVar?.unit).toBe('m³');
+    expect(Math.abs(parseFloat(vVar!.value) - 3.62288e-10)).toBeLessThan(1e-14);
+
+    // Conversion to µm^3 and µm³
+    const convPow = calc.evaluate('V -> µm^3');
+    expect(convPow.kind).toBe('display');
+    expect(convPow.display).toBe('3.62288e+08µm^3');
+
+    const convSuper = calc.evaluate('V -> µm³');
+    expect(convSuper.kind).toBe('display');
+    expect(convSuper.display).toBe('3.62288e+08µm³');
+
+    // Conversion to mm^3 and mm³
+    const convMm = calc.evaluate('V -> mm^3');
+    expect(convMm.kind).toBe('display');
+    expect(convMm.display).toBe('0.362288mm^3');
+
+    // Single-line assignment with conversion
+    const vDirect = calc.evaluate('V_direct = pi*(3.1mm)^2 * 12µm -> µm^3');
+    expect(vDirect.kind).toBe('value');
+    expect(vDirect.display).toBe('3.62288e+08µm^3');
+
+    // Support for Greek mu 'μ' as well as micro sign 'µ' and ascii 'u'
+    expect(calc.evaluate('d_greek = 12μm').kind).toBe('silent');
+    const convGreek = calc.evaluate('d_greek -> um');
+    expect(convGreek.kind).toBe('display');
+    expect(convGreek.display).toBe('12um');
+
+    // Unit addition across prefixes
+    const addRes = calc.evaluate('1m + 100cm');
+    expect(addRes.display).toBe('2m');
+
+    const subRes = calc.evaluate('10m - 2mm');
+    expect(subRes.display).toBe('9.998m');
+  });
 });
