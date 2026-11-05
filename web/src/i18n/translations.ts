@@ -28,6 +28,7 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     plotWindow: 'Plot Window',
     recalculate: 'Recalculate',
     preferences: 'Preferences...',
+    reloadApp: 'Reload Application',
     documentation: 'Documentation & Help',
     about: 'About PhyxCalc',
 
@@ -102,6 +103,7 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     plotWindow: 'Diagrammfenster',
     recalculate: 'Neu berechnen',
     preferences: 'Einstellungen...',
+    reloadApp: 'App neu laden',
     documentation: 'Dokumentation & Hilfe',
     about: 'Über PhyxCalc',
 

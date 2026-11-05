@@ -20,6 +20,7 @@ import {
   Sun,
   X,
   Download,
+  RefreshCw,
 } from 'lucide-react';
 
 import { Language, getTranslation } from '../i18n/translations';
@@ -46,6 +47,7 @@ interface MenuBarProps {
   onToggleDock: (dockName: string) => void;
   canInstall?: boolean;
   onInstallApp?: () => void;
+  onReloadApp?: () => void;
 }
 
 export const MenuBar: React.FC<MenuBarProps> = ({
@@ -70,6 +72,7 @@ export const MenuBar: React.FC<MenuBarProps> = ({
   onToggleDock,
   canInstall,
   onInstallApp,
+  onReloadApp,
 }) => {
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const menuBarRef = useRef<HTMLDivElement>(null);
@@ -167,6 +170,18 @@ export const MenuBar: React.FC<MenuBarProps> = ({
                   <Printer className="w-3.5 h-3.5 text-slate-500" /> {t('print')}
                 </span>
                 <span className="text-slate-400 text-[10px]">Ctrl+P</span>
+              </button>
+              <div className="border-t border-slate-100 dark:border-slate-700 my-1" />
+              <button
+                type="button"
+                onClick={() => handleItemClick(onReloadApp || (() => window.location.reload()))}
+                className="w-full text-left px-3 py-1.5 flex items-center justify-between hover:bg-slate-100 dark:hover:bg-slate-700"
+                title="Reload application, purge service worker cache, and fetch latest updates"
+              >
+                <span className="flex items-center gap-2">
+                  <RefreshCw className="w-3.5 h-3.5 text-blue-500" /> {t('reloadApp')}
+                </span>
+                <span className="text-slate-400 text-[10px]">Ctrl+Shift+R</span>
               </button>
               <div className="border-t border-slate-100 dark:border-slate-700 my-1" />
               <button
@@ -298,6 +313,17 @@ export const MenuBar: React.FC<MenuBarProps> = ({
                 <span className="flex items-center gap-2">
                   <FileText className="w-3.5 h-3.5 text-slate-500" /> Startup Definitions...
                 </span>
+              </button>
+              <button
+                type="button"
+                onClick={() => handleItemClick(onReloadApp || (() => window.location.reload()))}
+                className="w-full text-left px-3 py-1.5 flex items-center justify-between hover:bg-slate-100 dark:hover:bg-slate-700"
+                title="Reload application, purge service worker cache, and fetch latest updates"
+              >
+                <span className="flex items-center gap-2">
+                  <RefreshCw className="w-3.5 h-3.5 text-blue-500" /> {t('reloadApp')}
+                </span>
+                <span className="text-slate-400 text-[10px]">Ctrl+Shift+R</span>
               </button>
               <div className="border-t border-slate-100 dark:border-slate-700 my-1" />
               <button

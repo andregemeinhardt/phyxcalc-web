@@ -239,6 +239,13 @@ export default function App() {
   useEffect(() => {
     const client = new PhyxWorkerClient();
     client.setSettings(settings);
+
+    const savedDef = localStorage.getItem('phyxcalc_custom_definitions');
+    const savedSym = localStorage.getItem('phyxcalc_custom_symbols');
+    if (savedDef || savedSym) {
+      client.setDefinitions(savedDef ?? undefined, savedSym ?? undefined);
+    }
+
     workerClientRef.current = client;
 
     return () => {
@@ -579,6 +586,25 @@ export default function App() {
     window.print();
   };
 
+  // Reload application & purge cache
+  const handleReloadApp = useCallback(async () => {
+    try {
+      if ('serviceWorker' in navigator) {
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        for (const reg of registrations) {
+          await reg.unregister();
+        }
+      }
+      if ('caches' in window) {
+        const cacheKeys = await caches.keys();
+        await Promise.all(cacheKeys.map((key) => caches.delete(key)));
+      }
+    } catch (err) {
+      console.warn('Cache clearing failed:', err);
+    }
+    window.location.reload();
+  }, []);
+
   // Global keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -775,6 +801,7 @@ export default function App() {
           onToggleDock={handleToggleDock}
           canInstall={!!installPrompt}
           onInstallApp={handleInstallApp}
+          onReloadApp={handleReloadApp}
         />
       </div>
 
@@ -821,6 +848,9 @@ export default function App() {
               onEvaluate={handleRecalculate}
               getVariableNames={() =>
                 activeState?.variables.map((v) => v.name) || []
+              }
+              getUnitNames={() =>
+                activeState?.units.map((u) => u.symbol) || []
               }
               autoSuperscripts={autoSuperscripts}
             />
@@ -980,7 +1010,8 @@ export default function App() {
       <DefinitionsDialog
         isOpen={showDefinitions}
         onClose={() => setShowDefinitions(false)}
-        onSaveDefinitions={() => {
+        onSaveDefinitions={async (defText, symText) => {
+          await workerClientRef.current?.setDefinitions(defText, symText);
           handleRecalculate();
         }}
       />

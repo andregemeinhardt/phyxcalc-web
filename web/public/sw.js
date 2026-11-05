@@ -4,7 +4,7 @@
  * Dynamically resolves URLs relative to scope to support GitHub Pages subpaths.
  */
 
-const CACHE_NAME = 'phyxcalc-v1.0.0';
+const CACHE_NAME = 'phyxcalc-v1.0.1';
 
 self.addEventListener('install', (event) => {
   const scope = self.registration.scope;

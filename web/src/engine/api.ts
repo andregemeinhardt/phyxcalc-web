@@ -133,6 +133,7 @@ export type WorkerInMessage =
   | { type: 'EVALUATE_DOCUMENT'; payload: DocumentEvaluationRequest }
   | { type: 'RESET'; documentId?: string }
   | { type: 'SET_SETTINGS'; payload: Partial<EngineSettings> }
+  | { type: 'SET_DEFINITIONS'; payload: { defText?: string; symText?: string } }
   | { type: 'GET_STATE'; documentId?: string };
 
 export type WorkerOutMessage =

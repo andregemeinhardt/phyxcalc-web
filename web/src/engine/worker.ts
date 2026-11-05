@@ -9,14 +9,17 @@ import {
   WorkerOutMessage,
   EvaluationResponse,
   EngineStateSummary,
+  EngineSettings,
 } from './api';
 
 const calculators = new Map<string, PhyxCalculator>();
+let customDefinitions: { defText?: string; symText?: string } | null = null;
+let currentSettings: Partial<EngineSettings> = {};
 
 function getCalculator(docId: string = 'default'): PhyxCalculator {
   let calc = calculators.get(docId);
   if (!calc) {
-    calc = new PhyxCalculator();
+    calc = new PhyxCalculator(currentSettings, customDefinitions ?? undefined);
     calculators.set(docId, calc);
   }
   return calc;
@@ -154,8 +157,18 @@ self.onmessage = (event: MessageEvent<WorkerInMessage>) => {
 
     case 'SET_SETTINGS': {
       const settings = msg.payload;
+      currentSettings = { ...currentSettings, ...settings };
       for (const calc of calculators.values()) {
         calc.setSettings(settings);
+      }
+      break;
+    }
+
+    case 'SET_DEFINITIONS': {
+      const { defText, symText } = msg.payload;
+      customDefinitions = { defText, symText };
+      for (const calc of calculators.values()) {
+        calc.reloadDefinitions(defText, symText);
       }
       break;
     }

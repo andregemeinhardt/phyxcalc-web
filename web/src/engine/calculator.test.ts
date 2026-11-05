@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { PhyxCalculator } from './calculator';
+import rawDefinitions from '../assets/definitions.txt?raw';
 
 describe('PhyxCalc TypeScript Engine Proof of Concept', () => {
   const calc = new PhyxCalculator();
@@ -144,5 +145,26 @@ describe('PhyxCalc TypeScript Engine Proof of Concept', () => {
 
     const subRes = calc.evaluate('10m - 2mm');
     expect(subRes.display).toBe('9.998m');
+  });
+
+  it('loads and reloads custom startup definitions dynamically', () => {
+    const customCalc = new PhyxCalculator();
+    // Default calculator does not know custom unit "parsec_custom"
+    expect(customCalc.evaluate('10m -> parsec_custom').kind).toBe('error');
+
+    // Reload with custom definitions extending factory definitions
+    // PhyxCalc unit definition format: symbol=[expression]
+    customCalc.reloadDefinitions(
+      rawDefinitions + '\nparsec_custom=[3.085677581e16m]\n'
+    );
+    const r0 = customCalc.evaluate('2parsec_custom');
+    expect(r0.kind).toBe('value');
+    const res = customCalc.evaluate('2parsec_custom -> m');
+    expect(res.kind).toBe('display');
+    expect(res.display).toBe('6.17136e+16m');
+
+    // Inspect units contains the new unit
+    const units = customCalc.inspectUnits();
+    expect(units.some((u) => u.symbol === 'parsec_custom')).toBe(true);
   });
 });

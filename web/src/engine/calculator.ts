@@ -62,9 +62,17 @@ export class PhyxCalculator {
   private listAccumulator: Complex = Complex.zero();
   private listAccumulatorUnit: CompoundUnit = CompoundUnit.dimensionless();
 
-  constructor(customSettings?: Partial<EngineSettings>) {
+  constructor(
+    customSettings?: Partial<EngineSettings>,
+    customDefs?: { defText?: string; symText?: string }
+  ) {
     this.settings = { ...DEFAULT_ENGINE_SETTINGS, ...customSettings };
-    this.defs = loadStartupDefinitions();
+    this.defs = loadStartupDefinitions(customDefs?.defText, customDefs?.symText);
+    this.reset();
+  }
+
+  reloadDefinitions(customDefText?: string, customSymText?: string): void {
+    this.defs = loadStartupDefinitions(customDefText, customSymText);
     this.reset();
   }
 

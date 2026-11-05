@@ -38,6 +38,7 @@ export class PhyxWorkerClient {
     reject: (error: Error) => void;
   }> = [];
   private settings: EngineSettings = { ...DEFAULT_ENGINE_SETTINGS };
+  private customDefs: { defText?: string; symText?: string } | null = null;
   private terminated = false;
 
   constructor() {
@@ -52,6 +53,18 @@ export class PhyxWorkerClient {
       });
       this.worker.onmessage = this.handleMessage.bind(this);
       this.worker.onerror = this.handleError.bind(this);
+      if (this.customDefs && this.worker) {
+        this.worker.postMessage({
+          type: 'SET_DEFINITIONS',
+          payload: this.customDefs,
+        });
+      }
+      if (this.settings && this.worker) {
+        this.worker.postMessage({
+          type: 'SET_SETTINGS',
+          payload: this.settings,
+        });
+      }
     } catch (err) {
       console.error('Failed to initialize PhyxCalc Web Worker:', err);
     }
@@ -245,6 +258,19 @@ export class PhyxWorkerClient {
     return new Promise((resolve) => {
       if (this.worker) {
         this.worker.postMessage({ type: 'SET_SETTINGS', payload: settings });
+      }
+      resolve();
+    });
+  }
+
+  setDefinitions(defText?: string, symText?: string): Promise<void> {
+    this.customDefs = { defText, symText };
+    return new Promise((resolve) => {
+      if (this.worker) {
+        this.worker.postMessage({
+          type: 'SET_DEFINITIONS',
+          payload: { defText, symText },
+        });
       }
       resolve();
     });

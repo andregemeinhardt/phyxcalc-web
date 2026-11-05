@@ -26,6 +26,7 @@ interface WorksheetEditorProps {
   onChange: (content: string) => void;
   onEvaluate?: () => void;
   getVariableNames?: () => string[];
+  getUnitNames?: () => string[];
   autoSuperscripts?: boolean;
 }
 
@@ -37,6 +38,7 @@ export const WorksheetEditor = forwardRef<WorksheetEditorRef, WorksheetEditorPro
       onChange,
       onEvaluate,
       getVariableNames,
+      getUnitNames,
       autoSuperscripts = true,
     },
     ref
@@ -154,7 +156,7 @@ export const WorksheetEditor = forwardRef<WorksheetEditorRef, WorksheetEditorPro
       if (!editorContainerRef.current) return;
 
       const autocompleteExtension = autocompletion({
-        override: [createPhyxcalcAutocomplete(getVariableNames)],
+        override: [createPhyxcalcAutocomplete(getVariableNames, getUnitNames)],
       });
 
       const updateListener = EditorView.updateListener.of((update) => {

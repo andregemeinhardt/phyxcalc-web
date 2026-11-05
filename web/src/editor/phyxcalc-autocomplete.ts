@@ -66,9 +66,12 @@ const UNIT_COMPLETIONS = [
   { label: 'GiB', type: 'keyword', detail: 'Data: 1024³ Bytes' },
 ];
 
-export function createPhyxcalcAutocomplete(getVariables?: () => string[]) {
+export function createPhyxcalcAutocomplete(
+  getVariables?: () => string[],
+  getUnits?: () => string[]
+) {
   return function phyxcalcAutocomplete(context: CompletionContext): CompletionResult | null {
-    const word = context.matchBefore(/[a-zA-Z0-9_µπ°]+/);
+    const word = context.matchBefore(/[a-zA-Z0-9_µμ°]+/);
     if (!word || (word.from === word.to && !context.explicit)) {
       return null;
     }
@@ -79,12 +82,23 @@ export function createPhyxcalcAutocomplete(getVariables?: () => string[]) {
       detail: 'Worksheet variable',
     }));
 
+    const dynamicUnits = getUnits ? getUnits() : [];
+    const staticUnitLabels = new Set(UNIT_COMPLETIONS.map((u) => u.label));
+    const dynamicUnitCompletions = dynamicUnits
+      .filter((u) => !staticUnitLabels.has(u))
+      .map((u) => ({
+        label: u,
+        type: 'keyword',
+        detail: 'Unit definition',
+      }));
+
     return {
       from: word.from,
       options: [
         ...FUNCTION_COMPLETIONS,
         ...CONSTANT_COMPLETIONS,
         ...UNIT_COMPLETIONS,
+        ...dynamicUnitCompletions,
         ...variableCompletions,
       ],
     };

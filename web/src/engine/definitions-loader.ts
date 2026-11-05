@@ -407,13 +407,114 @@ function parseDerivedUnitDefinition(
     return KNOWN_UNITS[sym];
   }
 
-  // Fallback: check if existing units have it
+  // Fallback 1: check if existing units have exact match
   const existing = existingUnits.get(def);
   if (existing) {
     return { dimension: existing.dimension, scale: existing.scale };
   }
 
-  return null;
+  // Fallback 2: dynamically parse custom unit expressions (e.g. "5m", "3.085677581e16m", "10000m^2", "dm^3")
+  return parseUnitExpression(def, existingUnits);
+}
+
+function parseUnitExpression(
+  def: string,
+  existingUnits: Map<string, LoadedUnit>
+): { dimension: DimensionVector; scale: number } | null {
+  let text = def.trim();
+  if (!text) return null;
+
+  let overallScale = 1.0;
+  const dimension: DimensionVector = [0, 0, 0, 0, 0, 0, 0];
+
+  // 1. Check for leading numeric coefficient (e.g. "3.085677581e16", "5", "0.01", "1/60", "1e-3")
+  const numMatch = text.match(/^([+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?(?:\/\d+(?:\.\d*)?)?)\s*(.*)$/);
+  if (numMatch) {
+    const numPart = numMatch[1];
+    if (numPart.includes('/')) {
+      const [n, d] = numPart.split('/').map(Number);
+      overallScale = d !== 0 ? n / d : 1.0;
+    } else {
+      overallScale = parseFloat(numPart) || 1.0;
+    }
+    text = numMatch[2].trim();
+  }
+
+  // If only a number was provided, dimensionless unit with that scale
+  if (!text) {
+    return { dimension, scale: overallScale };
+  }
+
+  // 2. Tokenize unit formula (tokens: '*', '/', '^', exponents, identifiers)
+  // Normalize unicode exponents and multiplication dots
+  text = text
+    .replace(/²/g, '^2')
+    .replace(/³/g, '^3')
+    .replace(/⁴/g, '^4')
+    .replace(/·/g, '*');
+
+  const tokenRegex = /([*\/])|([a-zA-Zµμ°%'"]+)(?:\^([+-]?\d+))?/g;
+  let currentOp: '*' | '/' = '*';
+  let match: RegExpExecArray | null;
+  let matchedAny = false;
+
+  const PREFIXES: Record<string, number> = {
+    Y: 1e24, Z: 1e21, E: 1e18, P: 1e15, T: 1e12, G: 1e9, M: 1e6, k: 1e3, h: 1e2, da: 10,
+    d: 1e-1, c: 1e-2, m: 1e-3, µ: 1e-6, μ: 1e-6, u: 1e-6, n: 1e-9, p: 1e-12, f: 1e-15, a: 1e-18, z: 1e-21, y: 1e-24,
+  };
+
+  while ((match = tokenRegex.exec(text)) !== null) {
+    matchedAny = true;
+    if (match[1]) {
+      currentOp = match[1] as '*' | '/';
+      continue;
+    }
+
+    const unitSym = match[2];
+    const power = match[3] ? parseInt(match[3], 10) : 1;
+
+    let foundUnit: LoadedUnit | undefined = existingUnits.get(unitSym);
+    let prefixFactor = 1.0;
+
+    if (!foundUnit) {
+      // Check two-char prefixes first (da), then single-char
+      for (const [pref, factor] of Object.entries(PREFIXES)) {
+        if (unitSym.startsWith(pref) && unitSym.length > pref.length) {
+          const baseSym = unitSym.slice(pref.length);
+          const baseUnit = existingUnits.get(baseSym);
+          if (baseUnit) {
+            foundUnit = baseUnit;
+            prefixFactor = factor;
+            break;
+          }
+        }
+      }
+    }
+
+    if (!foundUnit) {
+      return null;
+    }
+
+    const termScale = Math.pow(foundUnit.scale * prefixFactor, power);
+    if (currentOp === '*') {
+      overallScale *= termScale;
+      for (let i = 0; i < 7; i++) {
+        dimension[i] += foundUnit.dimension[i] * power;
+      }
+    } else {
+      overallScale /= termScale;
+      for (let i = 0; i < 7; i++) {
+        dimension[i] -= foundUnit.dimension[i] * power;
+      }
+      currentOp = '*';
+    }
+  }
+
+  if (!matchedAny) {
+    return null;
+  }
+
+  return { dimension, scale: overallScale };
 }
 
 export const parseDefinitions = loadStartupDefinitions;
