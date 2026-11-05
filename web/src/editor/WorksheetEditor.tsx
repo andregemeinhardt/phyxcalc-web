@@ -4,7 +4,7 @@
  * and synchronized line-by-line result display.
  */
 
-import { useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
+import { useEffect, useRef, useImperativeHandle, forwardRef, useState, useCallback } from 'react';
 import { EditorState } from '@codemirror/state';
 import { EditorView, lineNumbers, highlightActiveLine, keymap } from '@codemirror/view';
 import { defaultKeymap, history, historyKeymap } from '@codemirror/commands';
@@ -41,9 +41,87 @@ export const WorksheetEditor = forwardRef<WorksheetEditorRef, WorksheetEditorPro
     },
     ref
   ) => {
+    const outerContainerRef = useRef<HTMLDivElement>(null);
     const editorContainerRef = useRef<HTMLDivElement>(null);
     const viewRef = useRef<EditorView | null>(null);
     const resultsContainerRef = useRef<HTMLDivElement>(null);
+
+    const [resultsWidth, setResultsWidth] = useState<number>(() => {
+      if (typeof window !== 'undefined') {
+        const saved = localStorage.getItem('phyxcalc_results_width');
+        if (saved) {
+          const parsed = parseInt(saved, 10);
+          if (!isNaN(parsed) && parsed >= 50 && parsed <= 1200) {
+            return parsed;
+          }
+        }
+        if (window.innerWidth < 640) {
+          return Math.max(80, Math.min(140, Math.floor(window.innerWidth * 0.35)));
+        }
+      }
+      return 240;
+    });
+
+    const [isDragging, setIsDragging] = useState<boolean>(false);
+    const isDraggingRef = useRef<boolean>(false);
+
+    const handleStartDrag = useCallback(
+      (clientX: number) => {
+        if (!outerContainerRef.current) return;
+        isDraggingRef.current = true;
+        setIsDragging(true);
+
+        const startX = clientX;
+        const startWidth = resultsWidth;
+        const containerRect = outerContainerRef.current.getBoundingClientRect();
+
+        const handlePointerMove = (currentX: number) => {
+          if (!isDraggingRef.current) return;
+          const deltaX = currentX - startX;
+          const proposed = startWidth - deltaX;
+          const maxAllowed = Math.max(80, containerRect.width - 60);
+          const minAllowed = 50;
+          const clamped = Math.max(minAllowed, Math.min(maxAllowed, proposed));
+          setResultsWidth(clamped);
+        };
+
+        const onMouseMove = (e: MouseEvent) => {
+          e.preventDefault();
+          handlePointerMove(e.clientX);
+        };
+
+        const onTouchMove = (e: TouchEvent) => {
+          if (e.touches.length > 0) {
+            handlePointerMove(e.touches[0].clientX);
+          }
+        };
+
+        const onEndDrag = () => {
+          if (isDraggingRef.current) {
+            isDraggingRef.current = false;
+            setIsDragging(false);
+            setResultsWidth((current) => {
+              try {
+                localStorage.setItem('phyxcalc_results_width', current.toString());
+              } catch {}
+              return current;
+            });
+          }
+          window.removeEventListener('mousemove', onMouseMove);
+          window.removeEventListener('mouseup', onEndDrag);
+          window.removeEventListener('touchmove', onTouchMove);
+          window.removeEventListener('touchend', onEndDrag);
+          window.removeEventListener('touchcancel', onEndDrag);
+        };
+
+        window.addEventListener('mousemove', onMouseMove);
+        window.addEventListener('mouseup', onEndDrag);
+        window.addEventListener('touchmove', onTouchMove, { passive: true });
+        window.addEventListener('touchend', onEndDrag);
+        window.addEventListener('touchcancel', onEndDrag);
+      },
+      [resultsWidth]
+    );
 
     useImperativeHandle(ref, () => ({
       insertText(text: string) {
@@ -225,14 +303,57 @@ export const WorksheetEditor = forwardRef<WorksheetEditorRef, WorksheetEditorPro
     return (
       <>
         {/* Screen: CodeMirror Editor & Synchronized Results Gutter */}
-        <div className="flex h-full w-full overflow-hidden border-t border-slate-200 dark:border-slate-800 print:hidden">
+        <div
+          ref={outerContainerRef}
+          className={`flex h-full w-full overflow-hidden border-t border-slate-200 dark:border-slate-800 print:hidden ${
+            isDragging ? 'select-none cursor-col-resize' : ''
+          }`}
+        >
           {/* Left: CodeMirror Input Editor */}
           <div className="relative flex-1 h-full min-w-0" ref={editorContainerRef} />
+
+          {/* Draggable Splitter Handle between Editor and Results */}
+          <div
+            role="separator"
+            aria-orientation="vertical"
+            aria-label="Resize results column"
+            tabIndex={0}
+            onMouseDown={(e) => {
+              e.preventDefault();
+              handleStartDrag(e.clientX);
+            }}
+            onTouchStart={(e) => {
+              if (e.touches.length > 0) {
+                handleStartDrag(e.touches[0].clientX);
+              }
+            }}
+            onDoubleClick={() => {
+              const resetWidth =
+                window.innerWidth < 640
+                  ? Math.max(80, Math.floor(window.innerWidth * 0.35))
+                  : 240;
+              setResultsWidth(resetWidth);
+              try {
+                localStorage.setItem('phyxcalc_results_width', resetWidth.toString());
+              } catch {}
+            }}
+            className={`relative flex items-center justify-center w-2 -ml-1 -mr-1 z-20 cursor-col-resize select-none touch-none group hover:bg-blue-500/20 active:bg-blue-500/30 transition-colors ${
+              isDragging ? 'bg-blue-500/30' : ''
+            }`}
+            title="Drag to resize results column (double-click to reset)"
+          >
+            <div
+              className={`w-[1px] h-full bg-slate-200 dark:bg-slate-800 group-hover:bg-blue-500 group-hover:w-[2px] transition-all ${
+                isDragging ? 'bg-blue-500 w-[2px]' : ''
+              }`}
+            />
+          </div>
 
           {/* Right: Results Gutter (Aligned with editor lines) */}
           <div
             ref={resultsContainerRef}
-            className="w-80 min-w-[240px] h-full overflow-hidden border-l border-slate-200 dark:border-slate-800 bg-slate-50/75 dark:bg-slate-900/50 select-text py-2"
+            style={{ width: `${resultsWidth}px` }}
+            className="shrink-0 h-full overflow-hidden border-l border-slate-200 dark:border-slate-800 bg-slate-50/75 dark:bg-slate-900/50 select-text py-2"
           >
             {lines.map((_, idx) => {
               const res = results[idx];

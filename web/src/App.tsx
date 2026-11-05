@@ -109,6 +109,85 @@ export default function App() {
   // Active dock panel: 'variables' | 'constants' | 'units' | 'symbols' | null
   const [activeDock, setActiveDock] = useState<string | null>('variables');
 
+  // Resizable dock width state
+  const [dockWidth, setDockWidth] = useState<number>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('phyxcalc_dock_width');
+      if (saved) {
+        const parsed = parseInt(saved, 10);
+        if (!isNaN(parsed) && parsed >= 160 && parsed <= 800) {
+          return parsed;
+        }
+      }
+      if (window.innerWidth < 640) {
+        return Math.max(160, Math.floor(window.innerWidth * 0.45));
+      }
+    }
+    return 320;
+  });
+
+  const [isDraggingDock, setIsDraggingDock] = useState<boolean>(false);
+  const isDraggingDockRef = useRef<boolean>(false);
+
+  const handleStartDragDock = useCallback(
+    (clientX: number) => {
+      isDraggingDockRef.current = true;
+      setIsDraggingDock(true);
+
+      const startX = clientX;
+      const startWidth = dockWidth;
+
+      const handlePointerMove = (currentX: number) => {
+        if (!isDraggingDockRef.current) return;
+        const deltaX = currentX - startX;
+        const proposed = startWidth - deltaX;
+        const maxAllowed =
+          typeof window !== 'undefined'
+            ? Math.max(160, window.innerWidth - 120)
+            : 600;
+        const minAllowed = 160;
+        const clamped = Math.max(minAllowed, Math.min(maxAllowed, proposed));
+        setDockWidth(clamped);
+      };
+
+      const onMouseMove = (e: MouseEvent) => {
+        e.preventDefault();
+        handlePointerMove(e.clientX);
+      };
+
+      const onTouchMove = (e: TouchEvent) => {
+        if (e.touches.length > 0) {
+          handlePointerMove(e.touches[0].clientX);
+        }
+      };
+
+      const onEndDrag = () => {
+        if (isDraggingDockRef.current) {
+          isDraggingDockRef.current = false;
+          setIsDraggingDock(false);
+          setDockWidth((curr) => {
+            try {
+              localStorage.setItem('phyxcalc_dock_width', curr.toString());
+            } catch {}
+            return curr;
+          });
+        }
+        window.removeEventListener('mousemove', onMouseMove);
+        window.removeEventListener('mouseup', onEndDrag);
+        window.removeEventListener('touchmove', onTouchMove);
+        window.removeEventListener('touchend', onEndDrag);
+        window.removeEventListener('touchcancel', onEndDrag);
+      };
+
+      window.addEventListener('mousemove', onMouseMove);
+      window.addEventListener('mouseup', onEndDrag);
+      window.addEventListener('touchmove', onTouchMove, { passive: true });
+      window.addEventListener('touchend', onEndDrag);
+      window.addEventListener('touchcancel', onEndDrag);
+    },
+    [dockWidth]
+  );
+
   // Dialog visibility states
   const [showPlot, setShowPlot] = useState<boolean>(false);
   const [showSettings, setShowSettings] = useState<boolean>(false);
@@ -750,7 +829,48 @@ export default function App() {
 
         {/* Right Collapsible Dock Panel */}
         {activeDock && (
-          <aside className="w-80 min-w-[280px] h-full border-l border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col z-10 shadow-sm print:hidden">
+          <aside
+            style={{ width: `${dockWidth}px` }}
+            className={`shrink-0 h-full border-l border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col z-10 shadow-sm print:hidden relative ${
+              isDraggingDock ? 'select-none' : ''
+            }`}
+          >
+            {/* Draggable Splitter on Left Edge of Dock */}
+            <div
+              role="separator"
+              aria-orientation="vertical"
+              aria-label="Resize dock panel"
+              tabIndex={0}
+              onMouseDown={(e) => {
+                e.preventDefault();
+                handleStartDragDock(e.clientX);
+              }}
+              onTouchStart={(e) => {
+                if (e.touches.length > 0) {
+                  handleStartDragDock(e.touches[0].clientX);
+                }
+              }}
+              onDoubleClick={() => {
+                const resetWidth =
+                  window.innerWidth < 640
+                    ? Math.max(160, Math.floor(window.innerWidth * 0.45))
+                    : 320;
+                setDockWidth(resetWidth);
+                try {
+                  localStorage.setItem('phyxcalc_dock_width', resetWidth.toString());
+                } catch {}
+              }}
+              className={`absolute -left-1 top-0 bottom-0 w-2 z-20 cursor-col-resize select-none touch-none hover:bg-blue-500/20 active:bg-blue-500/30 transition-colors flex items-center justify-center ${
+                isDraggingDock ? 'bg-blue-500/30' : ''
+              }`}
+              title="Drag to resize dock panel (double-click to reset)"
+            >
+              <div
+                className={`w-[1px] h-full bg-transparent hover:bg-blue-500 transition-colors ${
+                  isDraggingDock ? 'bg-blue-500' : ''
+                }`}
+              />
+            </div>
             {/* Dock Header Tabs */}
             <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40 px-2 pt-1">
               <div className="flex gap-1 text-xs font-medium">
