@@ -5,8 +5,8 @@
  */
 
 import { useEffect, useRef, useImperativeHandle, forwardRef, useState, useCallback } from 'react';
-import { EditorState } from '@codemirror/state';
-import { EditorView, lineNumbers, highlightActiveLine, keymap } from '@codemirror/view';
+import { EditorState, StateEffect, StateField, RangeSetBuilder } from '@codemirror/state';
+import { EditorView, lineNumbers, highlightActiveLine, keymap, Decoration, DecorationSet, WidgetType } from '@codemirror/view';
 import { defaultKeymap, history, historyKeymap } from '@codemirror/commands';
 import { autocompletion } from '@codemirror/autocomplete';
 import { setDiagnostics } from '@codemirror/lint';
@@ -28,7 +28,67 @@ interface WorksheetEditorProps {
   getVariableNames?: () => string[];
   getUnitNames?: () => string[];
   autoSuperscripts?: boolean;
+  isMobile?: boolean;
 }
+
+class InlineResultWidget extends WidgetType {
+  constructor(readonly display: string, readonly kind: string) {
+    super();
+  }
+  toDOM() {
+    const span = document.createElement('span');
+    span.className = `cm-result-badge cm-result-${this.kind}`;
+    span.textContent = `➔ ${this.display}`;
+    span.title = 'Tap to copy result';
+    span.addEventListener('pointerdown', (e) => {
+      e.stopPropagation();
+      try {
+        navigator.clipboard.writeText(this.display);
+      } catch {}
+    });
+    return span;
+  }
+  eq(other: InlineResultWidget) {
+    return this.display === other.display && this.kind === other.kind;
+  }
+  ignoreEvent() {
+    return false;
+  }
+}
+
+export const setResultsEffect = StateEffect.define<EvaluationResponse[]>();
+
+const inlineResultsField = StateField.define<DecorationSet>({
+  create() {
+    return Decoration.none;
+  },
+  update(decorations, tr) {
+    for (const e of tr.effects) {
+      if (e.is(setResultsEffect)) {
+        const builder = new RangeSetBuilder<Decoration>();
+        const results = e.value;
+        const doc = tr.state.doc;
+        for (let i = 0; i < results.length && i < doc.lines; i++) {
+          const res = results[i];
+          if (res && res.kind !== 'silent' && res.display) {
+            const line = doc.line(i + 1);
+            builder.add(
+              line.to,
+              line.to,
+              Decoration.widget({
+                widget: new InlineResultWidget(res.display, res.kind),
+                side: 1,
+              })
+            );
+          }
+        }
+        return builder.finish();
+      }
+    }
+    return decorations.map(tr.changes);
+  },
+  provide: (f) => EditorView.decorations.from(f),
+});
 
 export const WorksheetEditor = forwardRef<WorksheetEditorRef, WorksheetEditorProps>(
   (
@@ -40,6 +100,7 @@ export const WorksheetEditor = forwardRef<WorksheetEditorRef, WorksheetEditorPro
       getVariableNames,
       getUnitNames,
       autoSuperscripts = true,
+      isMobile = false,
     },
     ref
   ) => {
@@ -222,6 +283,8 @@ export const WorksheetEditor = forwardRef<WorksheetEditorRef, WorksheetEditorPro
           autocompleteExtension,
           customKeymap,
           updateListener,
+          EditorView.lineWrapping,
+          inlineResultsField,
           EditorView.theme({
             '&': {
               height: '100%',
@@ -300,6 +363,20 @@ export const WorksheetEditor = forwardRef<WorksheetEditorRef, WorksheetEditorPro
       view.dispatch(setDiagnostics(view.state, diagnostics));
     }, [results]);
 
+    // Update inline result decorations for mobile
+    useEffect(() => {
+      if (!viewRef.current) return;
+      if (isMobile) {
+        viewRef.current.dispatch({
+          effects: setResultsEffect.of(results),
+        });
+      } else {
+        viewRef.current.dispatch({
+          effects: setResultsEffect.of([]),
+        });
+      }
+    }, [results, isMobile]);
+
     const lines = content.split('\n');
 
     return (
@@ -314,80 +391,85 @@ export const WorksheetEditor = forwardRef<WorksheetEditorRef, WorksheetEditorPro
           {/* Left: CodeMirror Input Editor */}
           <div className="relative flex-1 h-full min-w-0" ref={editorContainerRef} />
 
-          {/* Draggable Splitter Handle between Editor and Results */}
-          <div
-            role="separator"
-            aria-orientation="vertical"
-            aria-label="Resize results column"
-            tabIndex={0}
-            onMouseDown={(e) => {
-              e.preventDefault();
-              handleStartDrag(e.clientX);
-            }}
-            onTouchStart={(e) => {
-              if (e.touches.length > 0) {
-                handleStartDrag(e.touches[0].clientX);
-              }
-            }}
-            onDoubleClick={() => {
-              const resetWidth =
-                window.innerWidth < 640
-                  ? Math.max(80, Math.floor(window.innerWidth * 0.35))
-                  : 240;
-              setResultsWidth(resetWidth);
-              try {
-                localStorage.setItem('phyxcalc_results_width', resetWidth.toString());
-              } catch {}
-            }}
-            className={`relative flex items-center justify-center w-2 -ml-1 -mr-1 z-20 cursor-col-resize select-none touch-none group hover:bg-blue-500/20 active:bg-blue-500/30 transition-colors ${
-              isDragging ? 'bg-blue-500/30' : ''
-            }`}
-            title="Drag to resize results column (double-click to reset)"
-          >
-            <div
-              className={`w-[1px] h-full bg-slate-200 dark:bg-slate-800 group-hover:bg-blue-500 group-hover:w-[2px] transition-all ${
-                isDragging ? 'bg-blue-500 w-[2px]' : ''
-              }`}
-            />
-          </div>
-
-          {/* Right: Results Gutter (Aligned with editor lines) */}
-          <div
-            ref={resultsContainerRef}
-            style={{ width: `${resultsWidth}px` }}
-            className="shrink-0 h-full overflow-hidden border-l border-slate-200 dark:border-slate-800 bg-slate-50/75 dark:bg-slate-900/50 select-text py-2"
-          >
-            {lines.map((_, idx) => {
-              const res = results[idx];
-              return (
+          {/* Desktop Only: Results column & draggable splitter */}
+          {!isMobile && (
+            <>
+              {/* Draggable Splitter Handle between Editor and Results */}
+              <div
+                role="separator"
+                aria-orientation="vertical"
+                aria-label="Resize results column"
+                tabIndex={0}
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  handleStartDrag(e.clientX);
+                }}
+                onTouchStart={(e) => {
+                  if (e.touches.length > 0) {
+                    handleStartDrag(e.touches[0].clientX);
+                  }
+                }}
+                onDoubleClick={() => {
+                  const resetWidth =
+                    window.innerWidth < 640
+                      ? Math.max(80, Math.floor(window.innerWidth * 0.35))
+                      : 240;
+                  setResultsWidth(resetWidth);
+                  try {
+                    localStorage.setItem('phyxcalc_results_width', resetWidth.toString());
+                  } catch {}
+                }}
+                className={`relative flex items-center justify-center w-2 -ml-1 -mr-1 z-20 cursor-col-resize select-none touch-none group hover:bg-blue-500/20 active:bg-blue-500/30 transition-colors ${
+                  isDragging ? 'bg-blue-500/30' : ''
+                }`}
+                title="Drag to resize results column (double-click to reset)"
+              >
                 <div
-                  key={idx}
-                  className="h-6 px-3 flex items-center justify-end font-mono text-xs overflow-hidden text-ellipsis whitespace-nowrap text-right"
-                  style={{ height: '24px' }}
-                  title={res?.display || ''}
-                >
-                  {res && res.kind !== 'silent' && (
-                    <span
-                      className={`cursor-pointer px-1.5 py-0.5 rounded transition-colors ${
-                        res.kind === 'error'
-                          ? 'text-red-600 dark:text-red-400 bg-red-100/70 dark:bg-red-950/50 font-semibold'
-                          : res.kind === 'display'
-                          ? 'text-blue-700 dark:text-blue-300 bg-blue-50/50 dark:bg-blue-950/30'
-                          : 'text-emerald-700 dark:text-emerald-400 bg-emerald-50/60 dark:bg-emerald-950/30'
-                      }`}
-                      onClick={() => {
-                        if (res.display) {
-                          navigator.clipboard.writeText(res.display);
-                        }
-                      }}
+                  className={`w-[1px] h-full bg-slate-200 dark:bg-slate-800 group-hover:bg-blue-500 group-hover:w-[2px] transition-all ${
+                    isDragging ? 'bg-blue-500 w-[2px]' : ''
+                  }`}
+                />
+              </div>
+
+              {/* Right: Results Gutter (Aligned with editor lines) */}
+              <div
+                ref={resultsContainerRef}
+                style={{ width: `${resultsWidth}px` }}
+                className="shrink-0 h-full overflow-hidden border-l border-slate-200 dark:border-slate-800 bg-slate-50/75 dark:bg-slate-900/50 select-text py-2"
+              >
+                {lines.map((_, idx) => {
+                  const res = results[idx];
+                  return (
+                    <div
+                      key={idx}
+                      className="h-6 px-3 flex items-center justify-end font-mono text-xs overflow-hidden text-ellipsis whitespace-nowrap text-right"
+                      style={{ height: '24px' }}
+                      title={res?.display || ''}
                     >
-                      {res.display}
-                    </span>
-                  )}
-                </div>
-              );
-            })}
-          </div>
+                      {res && res.kind !== 'silent' && (
+                        <span
+                          className={`cursor-pointer px-1.5 py-0.5 rounded transition-colors ${
+                            res.kind === 'error'
+                              ? 'text-red-600 dark:text-red-400 bg-red-100/70 dark:bg-red-950/50 font-semibold'
+                              : res.kind === 'display'
+                              ? 'text-blue-700 dark:text-blue-300 bg-blue-50/50 dark:bg-blue-950/30'
+                              : 'text-emerald-700 dark:text-emerald-400 bg-emerald-50/60 dark:bg-emerald-950/30'
+                          }`}
+                          onClick={() => {
+                            if (res.display) {
+                              navigator.clipboard.writeText(res.display);
+                            }
+                          }}
+                        >
+                          {res.display}
+                        </span>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </>
+          )}
         </div>
 
         {/* Print Only: High-Contrast Formatted Document */}

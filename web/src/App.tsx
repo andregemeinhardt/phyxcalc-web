@@ -30,6 +30,11 @@ import {
   EvaluationResponse,
 } from './engine/api';
 import { X, Wifi, WifiOff } from 'lucide-react';
+import { useIsMobile } from './hooks/useIsMobile';
+import { MobileHeader } from './components/mobile/MobileHeader';
+import { MobileDrawer } from './components/mobile/MobileDrawer';
+import { MobileBottomSheet } from './components/mobile/MobileBottomSheet';
+import { MobileAccessoryBar } from './components/mobile/MobileAccessoryBar';
 
 const INITIAL_WORKSHEET = `// PhyxCalc Web - Scientific & Physical Units Calculator
 radius = 5m
@@ -195,6 +200,10 @@ export default function App() {
   const [showExport, setShowExport] = useState<boolean>(false);
   const [showAbout, setShowAbout] = useState<boolean>(false);
   const [showHelp, setShowHelp] = useState<boolean>(false);
+  const [showMobileDrawer, setShowMobileDrawer] = useState<boolean>(false);
+
+  // Responsive device hook
+  const isMobile = useIsMobile();
 
   // References
   const editorRef = useRef<WorksheetEditorRef | null>(null);
@@ -777,63 +786,108 @@ export default function App() {
         </div>
       )}
 
-      {/* Menu Bar */}
-      <div className="print:hidden">
-        <MenuBar
-          onNewTab={handleNewTab}
-          onOpen={handleOpenClick}
-          onSave={handleSave}
-          onExport={() => setShowExport(true)}
-          onPrint={handlePrint}
-          onCloseTab={() => handleCloseTab()}
-          onClearWorksheet={handleClearWorksheet}
-          onRecalculate={handleRecalculate}
-          onOpenPlot={() => setShowPlot(true)}
-          onOpenSettings={() => setShowSettings(true)}
-          onOpenDefinitions={() => setShowDefinitions(true)}
-          onOpenHelp={() => setShowHelp(true)}
-          onOpenAbout={() => setShowAbout(true)}
-          isDark={isDark}
-          onToggleTheme={() => setIsDark(!isDark)}
-          language={language}
-          onLanguageChange={setLanguage}
-          activeDock={activeDock}
-          onToggleDock={handleToggleDock}
-          canInstall={!!installPrompt}
-          onInstallApp={handleInstallApp}
-          onReloadApp={handleReloadApp}
-        />
-      </div>
+      {/* Mobile Top Header & Drawer (Screens < 768px) */}
+      {isMobile ? (
+        <div className="print:hidden">
+          <MobileHeader
+            title={activeTab?.title || 'Worksheet'}
+            tabs={tabs}
+            activeTabId={activeTabId}
+            onSelectTab={setActiveTabId}
+            onNewTab={handleNewTab}
+            onOpenDrawer={() => setShowMobileDrawer(true)}
+            isDark={isDark}
+            onToggleTheme={() => setIsDark(!isDark)}
+            datasetCount={activeDatasets.length}
+            onOpenPlot={() => setShowPlot(true)}
+            onRecalculate={handleRecalculate}
+          />
+          <MobileDrawer
+            isOpen={showMobileDrawer}
+            onClose={() => setShowMobileDrawer(false)}
+            tabs={tabs}
+            activeTabId={activeTabId}
+            onSelectTab={setActiveTabId}
+            onNewTab={handleNewTab}
+            onCloseTab={handleCloseTab}
+            onRenameTab={handleRenameTab}
+            onOpen={handleOpenClick}
+            onSave={handleSave}
+            onExport={() => setShowExport(true)}
+            onPrint={handlePrint}
+            onClearWorksheet={handleClearWorksheet}
+            onOpenPlot={() => setShowPlot(true)}
+            onOpenSettings={() => setShowSettings(true)}
+            onOpenDefinitions={() => setShowDefinitions(true)}
+            onOpenHelp={() => setShowHelp(true)}
+            onOpenAbout={() => setShowAbout(true)}
+            language={language}
+            onLanguageChange={setLanguage}
+            canInstall={!!installPrompt}
+            onInstallApp={handleInstallApp}
+          />
+        </div>
+      ) : (
+        <>
+          {/* Menu Bar */}
+          <div className="print:hidden">
+            <MenuBar
+              onNewTab={handleNewTab}
+              onOpen={handleOpenClick}
+              onSave={handleSave}
+              onExport={() => setShowExport(true)}
+              onPrint={handlePrint}
+              onCloseTab={() => handleCloseTab()}
+              onClearWorksheet={handleClearWorksheet}
+              onRecalculate={handleRecalculate}
+              onOpenPlot={() => setShowPlot(true)}
+              onOpenSettings={() => setShowSettings(true)}
+              onOpenDefinitions={() => setShowDefinitions(true)}
+              onOpenHelp={() => setShowHelp(true)}
+              onOpenAbout={() => setShowAbout(true)}
+              isDark={isDark}
+              onToggleTheme={() => setIsDark(!isDark)}
+              language={language}
+              onLanguageChange={setLanguage}
+              activeDock={activeDock}
+              onToggleDock={handleToggleDock}
+              canInstall={!!installPrompt}
+              onInstallApp={handleInstallApp}
+              onReloadApp={handleReloadApp}
+            />
+          </div>
 
-      {/* Toolbar */}
-      <div className="print:hidden">
-        <Toolbar
-          onNewTab={handleNewTab}
-          onOpen={handleOpenClick}
-          onSave={handleSave}
-          onExport={() => setShowExport(true)}
-          onPrint={handlePrint}
-          onRecalculate={handleRecalculate}
-          onOpenPlot={() => setShowPlot(true)}
-          onOpenSettings={() => setShowSettings(true)}
-          onOpenHelp={() => setShowHelp(true)}
-          activeDock={activeDock}
-          onToggleDock={handleToggleDock}
-          datasetCount={activeDatasets.length}
-        />
-      </div>
+          {/* Toolbar */}
+          <div className="print:hidden">
+            <Toolbar
+              onNewTab={handleNewTab}
+              onOpen={handleOpenClick}
+              onSave={handleSave}
+              onExport={() => setShowExport(true)}
+              onPrint={handlePrint}
+              onRecalculate={handleRecalculate}
+              onOpenPlot={() => setShowPlot(true)}
+              onOpenSettings={() => setShowSettings(true)}
+              onOpenHelp={() => setShowHelp(true)}
+              activeDock={activeDock}
+              onToggleDock={handleToggleDock}
+              datasetCount={activeDatasets.length}
+            />
+          </div>
 
-      {/* Worksheet Tabs */}
-      <div className="print:hidden">
-        <WorksheetTabs
-          tabs={tabs}
-          activeTabId={activeTabId}
-          onSelectTab={setActiveTabId}
-          onNewTab={handleNewTab}
-          onCloseTab={handleCloseTab}
-          onRenameTab={handleRenameTab}
-        />
-      </div>
+          {/* Worksheet Tabs */}
+          <div className="print:hidden">
+            <WorksheetTabs
+              tabs={tabs}
+              activeTabId={activeTabId}
+              onSelectTab={setActiveTabId}
+              onNewTab={handleNewTab}
+              onCloseTab={handleCloseTab}
+              onRenameTab={handleRenameTab}
+            />
+          </div>
+        </>
+      )}
 
       {/* Main Workspace: Editor on Left, Dock on Right */}
       <div className="flex flex-1 overflow-hidden relative print:overflow-visible print:h-auto">
@@ -853,12 +907,13 @@ export default function App() {
                 activeState?.units.map((u) => u.symbol) || []
               }
               autoSuperscripts={autoSuperscripts}
+              isMobile={isMobile}
             />
           )}
         </div>
 
-        {/* Right Collapsible Dock Panel */}
-        {activeDock && (
+        {/* Right Collapsible Dock Panel (Desktop Only) */}
+        {!isMobile && activeDock && (
           <aside
             style={{ width: `${dockWidth}px` }}
             className={`shrink-0 h-full border-l border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col z-10 shadow-sm print:hidden relative ${
@@ -960,30 +1015,59 @@ export default function App() {
         )}
       </div>
 
-      {/* Status Bar */}
-      <footer className="h-6 bg-slate-100 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 px-3 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 select-none print:hidden">
-        <div className="flex items-center gap-3">
-          <span>Lines: {activeTab?.content.split('\n').length || 0}</span>
-          <span>Variables: {activeState?.variables.length || 0}</span>
-          <span>Datasets: {activeDatasets.length}</span>
-          <div className="flex items-center gap-1 pl-2 border-l border-slate-200 dark:border-slate-800 font-medium">
-            {isOnline ? (
-              <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400" title="Connected: PWA precache active">
-                <Wifi size={11} /> Online (PWA Ready)
-              </span>
-            ) : (
-              <span className="flex items-center gap-1 text-amber-600 dark:text-amber-400" title="Offline: Calculating locally via Web Worker">
-                <WifiOff size={11} /> Offline Mode
-              </span>
-            )}
+      {/* Mobile Slide-Up Bottom Sheet for Docks */}
+      {isMobile && activeDock && (
+        <MobileBottomSheet
+          activeDock={activeDock}
+          onSelectDock={(dock) => setActiveDock(dock)}
+          onClose={() => setActiveDock(null)}
+          variables={activeState?.variables || []}
+          constants={activeState?.constants || []}
+          units={activeState?.units || []}
+          onInsert={handleInsertText}
+          onRemoveVariable={(name) => {
+            handleInsertText(`\ndelete ${name}\n`);
+          }}
+        />
+      )}
+
+      {/* Mobile Accessory Bar */}
+      {isMobile && (
+        <div className="print:hidden">
+          <MobileAccessoryBar
+            onInsertText={handleInsertText}
+            onOpenDock={handleToggleDock}
+            activeDock={activeDock}
+          />
+        </div>
+      )}
+
+      {/* Status Bar (Desktop only) */}
+      {!isMobile && (
+        <footer className="h-6 bg-slate-100 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 px-3 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 select-none print:hidden">
+          <div className="flex items-center gap-3">
+            <span>Lines: {activeTab?.content.split('\n').length || 0}</span>
+            <span>Variables: {activeState?.variables.length || 0}</span>
+            <span>Datasets: {activeDatasets.length}</span>
+            <div className="flex items-center gap-1 pl-2 border-l border-slate-200 dark:border-slate-800 font-medium">
+              {isOnline ? (
+                <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400" title="Connected: PWA precache active">
+                  <Wifi size={11} /> Online (PWA Ready)
+                </span>
+              ) : (
+                <span className="flex items-center gap-1 text-amber-600 dark:text-amber-400" title="Offline: Calculating locally via Web Worker">
+                  <WifiOff size={11} /> Offline Mode
+                </span>
+              )}
+            </div>
           </div>
-        </div>
-        <div className="flex items-center gap-3">
-          <span>Engine: TypeScript Native (v1.0.0)</span>
-          <span>Format: {settings.numberFormat.toUpperCase()}</span>
-          <span>Precision: {settings.decimalPrecision}</span>
-        </div>
-      </footer>
+          <div className="flex items-center gap-3">
+            <span>Engine: TypeScript Native (v1.0.0)</span>
+            <span>Format: {settings.numberFormat.toUpperCase()}</span>
+            <span>Precision: {settings.decimalPrecision}</span>
+          </div>
+        </footer>
+      )}
 
       {/* Dialog Modals */}
       <ErrorBoundary>
